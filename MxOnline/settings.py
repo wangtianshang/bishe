@@ -131,7 +131,7 @@ LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 #345
 USE_I18N = True
-
+#567
 USE_L10N = True
 
 USE_TZ = False
