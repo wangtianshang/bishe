@@ -79,15 +79,10 @@
 
                             <li class="first"><p class="pic9">课程数：<span>{{ course_org.course_nums }}</span></p><p class="c7">学习人数：<span>{{ course_org.students }}</span></p></li>
                             <li class="c8" style="padding-left:18px;">{{ course_org.city }}</li>
-                            <li class="pic10" style="padding-left:18px;">经典课程：
-                                {% for i in course_org.courses_course_set.filter %}
-                                    <a href="">{{ i.name }}</a>
-                                {% endfor %}
-
-{#                                    <a href="">c语言基础入门</a>#}
-{##}
-{#                                    <a href="">数据库基础</a>#}
-
+                            <li class="pic10" style="padding-left:18px;">机构类别：
+                                    <a href="#">{% ifequal course_org.category 'gx'  %}{{ '高校' }}{% endifequal %}</a>
+                                    <a href="#">{% ifequal course_org.category 'gr'  %}{{ '个人' }}{% endifequal %}</a>
+                                    <a href="#">{% ifequal course_org.category 'pxjg'  %}{{ '培训机构' }}{% endifequal %}</a>
                             </li>
                         </ul>
                     </dd>

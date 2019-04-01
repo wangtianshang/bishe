@@ -99,6 +99,7 @@ class OrgHomeView(View):
 
         all_courses = course_org.course_set.all()[:3]
         all_teachers = course_org.teacher_set.all()[:1]
+        # print(all_teachers)
         return render(request, 'org-detail-homepage.html', {
             'all_courses':all_courses,
             'all_teachers': all_teachers,
