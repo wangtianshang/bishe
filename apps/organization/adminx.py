@@ -16,7 +16,9 @@ class CourseOrgAdmin(object):
     list_display = ['name', 'desc', 'click_nums', 'fav_nums']
     search_fields = ['name', 'desc', 'click_nums', 'fav_nums']
     list_filter = ['name', 'desc', 'click_nums', 'fav_nums']
-    relfield_style = 'fk-ajax'
+    #设置refield_style = 'fk-ajax'
+    # 当添加课程时，课程机构下拉列表，如果有成千上百，很不方便，可以设置搜索模式，搜索模式就是如下设置，不喜欢可以改变
+    # relfield_style = 'fk-ajax'
     style_fields = {"desc":"ueditor"}
     model_icon = 'fa fa-university'
 
@@ -26,6 +28,7 @@ class TeacherAdmin(object):
     search_fields = ['org', 'name', 'work_years', 'work_company']
     list_filter = ['org', 'name', 'work_years', 'work_company']
     model_icon = 'fa fa-user-md'
+
 
 xadmin.site.register(CityDict, CityDictAdmin)
 xadmin.site.register(CourseOrg, CourseOrgAdmin)
