@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}课程机构列表 - 慕学在线网{% endblock %}
+{% block title %}社区 - 在线学习网{% endblock %}
 {% load staticfiles %}
 {% block custom_bread %}
     <section>
         <div class="wp">
             <ul  class="crumbs">
                 <li><a href="/">首页</a>></li>
-                <li>社区</li>
+                <li><a href="{% url 'shequ' %}">社区</a></li>
             </ul>
         </div>
     </section>
@@ -20,7 +20,7 @@
 		<div class="listoptions">
 			<ul>
 				<li>
-					<h2>全部节点</h2>
+					<h2>节点</h2>
 					<div class="cont">
                         <a><span>全部</span></a>
 
@@ -29,7 +29,6 @@
                             <a ><span >python</span></a>
 
                             <a ><span>java</span></a>
-
 					</div>
 				</li>
 			</ul>
@@ -40,8 +39,8 @@
 			<div class="head">
 				<ul class="tab_header">
 					<li class="{% if sort == '' %}active{% endif %}"><a href="?ct={{ category }}&city={{ city_id }}">全部</a> </li>
-					<li class="{% if sort == 'students' %}active{% endif %}"><a href="?sort=students&ct={{ category }}&city={{ city_id }}">学习人数 &#8595;</a></li>
-					<li class="{% if sort == 'courses' %}active{% endif %}"><a href="?sort=courses&ct={{ category }}&city={{ city_id }}">课程数 &#8595;</a></li>
+					<li class="{% if sort == 'students' %}active{% endif %}"><a href="?sort=students&ct={{ category }}&city={{ city_id }}">最新 &#8595;</a></li>
+					<li class="{% if sort == 'courses' %}active{% endif %}"><a href="?sort=courses&ct={{ category }}&city={{ city_id }}">最热 &#8595;</a></li>
 				</ul>
 			</div>
             {% for course_org in all_orgs.object_list %}
@@ -131,7 +130,7 @@
 		</div>
 
 		<div class="right companyrank layout">
-			<div class="head">授课机构排名</div>
+			<div class="head">推荐话题</div>
 
             {% for curent_org in hot_orgs %}
                 <dl class="des">

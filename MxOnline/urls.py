@@ -23,6 +23,7 @@ from django.views.static import serve#处理静态位置文件
 
 from users.views import LogoutView, LoginView, RegisterView, AciveUserView, ForgetPwdView, ResetView, ModifyPwdView
 from users.views import IndexView
+from community.views import CommunView
 from organization.views import OrgView
 from MxOnline.settings import MEDIA_ROOT
 
@@ -39,7 +40,7 @@ urlpatterns = [
     url(r'^forget/$', ForgetPwdView.as_view(), name="forget_pwd"),
     url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name="reset_pwd"),
     url(r'^modify_pwd/$', ModifyPwdView.as_view(), name="modify_pwd"),
-    # url(r'^shequ/$', ModifyPwdView.as_view(), name="shequ"),
+    url(r'^shequ/$', CommunView.as_view(), name="shequ"),
 
     #课程机构url配置
     url(r'^org/', include('organization.urls', namespace="org")),
