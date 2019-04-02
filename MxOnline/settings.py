@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'captcha',
     'pure_pagination',
     'DjangoUeditor',
-    'community',
+
 ]
 #添加xadmin还需要注册一个crispy_forms
 AUTH_USER_MODEL = "users.UserProfile"
