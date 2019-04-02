@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from django.apps import AppConfig
 
 
 class CommunityConfig(AppConfig):
     name = 'community'
-    verbose_name = u"¿Î³Ì¹ÜÀí"
+    verbose_name = u'ç¤¾åŒºç®¡ç†'
