@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'pure_pagination',
     'DjangoUeditor',
 ]
+#添加xadmin还需要注册一个crispy_forms
 AUTH_USER_MODEL = "users.UserProfile"
 
 MIDDLEWARE_CLASSES = [
