@@ -8,7 +8,7 @@ class NodeAdmin(object):
 
 
 class TopicAdmin(object):
-    list_display = ['name','content' ,'add_time','click_num','number','add_time']
+    list_display = ['name','content' ,'add_time','click_num','number','floor','add_time']
     search_fields = ['name','content' ,'add_time','click_num','number']
     list_filter = ['name','content' ,'add_time','click_num','number']
 

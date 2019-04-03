@@ -24,11 +24,10 @@
 					<div class="cont">
                         <a><span>全部</span></a>
 
-                            <a><span>django</span></a>
+                                {% for node in all_node %}
+                                    <a><span>{{ node.name }} </span></a>
+                                {% endfor %}
 
-                            <a ><span >python</span></a>
-
-                            <a ><span>java</span></a>
 					</div>
 				</li>
 			</ul>
@@ -150,27 +149,3 @@
 </section>
 {% endblock %}
 
-{% block custom_js %}
-<script>
-    $(function(){
-        $('#jsStayBtn').on('click', function(){
-            $.ajax({
-                cache: false,
-                type: "POST",
-                url:"{% url "org:add_ask" %}",
-                data:$('#jsStayForm').serialize(),
-                async: true,
-                success: function(data) {
-                    if(data.status == 'success'){
-                        $('#jsStayForm')[0].reset();
-                        alert("提交成功")
-                    }else if(data.status == 'fail'){
-                        $('#jsCompanyTips').html(data.msg)
-                    }
-                },
-            });
-        });
-    })
-
-</script>
-{% endblock %}
