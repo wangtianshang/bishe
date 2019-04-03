@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}社区 - 在线学习网{% endblock %}
 {% load staticfiles %}
+
+{% block title %}社区 - 在线学习网{% endblock %}
+
 {% block custom_bread %}
     <section>
         <div class="wp">
@@ -12,7 +14,6 @@
     </section>
 {% endblock %}
 
-
 {% block content %}
 <section>
 	<div class="wp butler_list_box list">
@@ -22,75 +23,67 @@
 				<li>
 					<h2>节点</h2>
 					<div class="cont">
-                        <a><span>全部</span></a>
-
+{#                    如果后台传过来的node_id为空  全部显示高亮#}
+                        <a href="?sort={{ sort }}"><span class="{% ifequal node_id '' %}active2{% endifequal %}">全部</span></a>
                                 {% for node in all_node %}
-                                    <a><span>{{ node.name }} </span></a>
+                                    <a href="?node={{ node.id }}&sort={{ sort }}">
+{#                                    如果后台传过来的id与当前id相同就高亮#}
+                                    <span class="{% ifequal node_id node.id|stringformat:"i" %}active2{% endifequal %}">{{ node.name }}</span>
+                                    </a>
                                 {% endfor %}
-
 					</div>
 				</li>
 			</ul>
 		</div>
-		<div class="all">共<span class="key">{{ org_nums }}</span>家</div>
+        <div class="all">共<span class="key">{{ nums }}</span>个话题</div>
 		<div class="butler_list company list">
 		<div class="layout">
 			<div class="head">
 				<ul class="tab_header">
-					<li class="{% if sort == '' %}active{% endif %}"><a href="?ct={{ category }}&city={{ city_id }}">全部</a> </li>
-					<li class="{% if sort == 'students' %}active{% endif %}"><a href="?sort=students&ct={{ category }}&city={{ city_id }}">最新 &#8595;</a></li>
-					<li class="{% if sort == 'courses' %}active{% endif %}"><a href="?sort=courses&ct={{ category }}&city={{ city_id }}">最热 &#8595;</a></li>
+					<li class="{% if sort == '' %}active{% endif %}"><a href="?node={{ node_id }}">全部</a> </li>
+{#                    最新和最熱与前面的节点结合起来使用#}
+					<li class="{% if sort == 'addtime' %}active{% endif %}"><a href="?sort=addtime&node={{ node_id }}">最新 &#8595;</a></li>
+					<li class="{% if sort == 'clicknum' %}active{% endif %}"><a href="?sort=clicknum&node={{ node_id }}">最热 &#8595;</a></li>
 				</ul>
 			</div>
-            {% for course_org in all_orgs.object_list %}
+            {% for topic in all_topic.object_list %}
                 <dl class="des difdes">
                     <dt>
-                        <a href="{% url 'org:org_home' course_org.id %}">
+{#                        <a href="{% url 'org:org_home' topic.id %}">#}
+{#                        此处是以后话题跳转的地方#}
+                        <a href="#">
                             <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ course_org.image }}"/>
                         </a>
                     </dt>
                     <dd>
                         <div class="clearfix">
-                             <a href="{% url 'org:org_home' course_org.id %}">
-                                 <h1>{{ course_org.name }}</h1>
-                                 <div class="pic fl">
-
-                                         <img src="{% static 'images/authentication.png' %}"/>
-
-                                         <img src="{% static 'images/gold.png' %}"/>
-
-                                 </div>
+                             <a href="">
+                                 <h1>{{ topic.name }}</h1>
                              </a>
                         </div>
                         <ul class="cont">
 
-                            <li class="first"><p class="pic9">课程数：<span>{{ course_org.course_nums }}</span></p><p class="c7">学习人数：<span>{{ course_org.students }}</span></p></li>
-                            <li class="c8" style="padding-left:18px;">{{ course_org.city }}</li>
-                            <li class="pic10" style="padding-left:18px;">经典课程：
-                                {% for i in course_org.courses_course_set.filter %}
-                                    <a href="">{{ i.name }}</a>
-                                {% endfor %}
-
-{#                                    <a href="">c语言基础入门</a>#}
-{##}
-{#                                    <a href="">数据库基础</a>#}
-
+                            <li style="padding-bottom:18px;">内容：
+                                    <a href="">{{ topic.content }}</a>
+                            </li>
+                            <li class="first" style="padding-top:10px;">
+                                <p class="pic9">点击数：<span>{{ topic.click_num }}</span></p>
+                                <p class="c7">评论数：<span>{{ topic.number }}</span></p>
                             </li>
                         </ul>
                     </dd>
-                    <div class="buy start_groupbuy jsShowPerfect2" data-id="22"><br/>联系<br/>服务</div>
                 </dl>
             {% endfor %}
 		</div>
 		 <div class="pageturn">
             <ul class="pagelist">
-                {% if all_orgs.has_previous %}
-                    <li class="long"><a href="?{{ all_orgs.previous_page_number.querystring }}">上一页</a></li>
+                {% if all_topic.has_previous %}
+                    <li class="long"><a href="?{{ all_topic.previous_page_number.querystring }}">上一页</a></li>
                 {% endif %}
 
-                {% for page in all_orgs.pages %}
+                {% for page in all_topic.pages %}
                     {% if page %}
-                        {% ifequal page all_orgs.number %}
+                        {% ifequal page all_topic.number %}
                             <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
                         {% else %}
                             <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
@@ -99,31 +92,29 @@
                         <li class="none"><a href="">...</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if all_orgs.has_next %}
-                    <li class="long"><a href="?{{ all_orgs.next_page_number.querystring }}">下一页</a></li>
+                {% if all_topic.has_next %}
+                    <li class="long"><a href="?{{ all_topic.next_page_number.querystring }}">下一页</a></li>
                 {% endif %}
 
             </ul>
         </div>
 		</div>
 	</div>
-	<div class="right companyright">
-			<div class="head">我要学习</div>
-			<form class="rightform" id="jsStayForm">
-				<div>
+	<div class="right companyright" style="background-color: white">
+            <a href="#" class="new_button">我发布的</a>
+            <hr>
+            <a href="#" class="new_button">我要发布</a>
+			<hr>
+			<form class="rightform" style="height: 200px" id="jsStayForm">
+				<div style="margin-top: 1px">
                     <img src="{% static 'images/rightform1.png' %}"/>
                     <input type="text" name="name" id="companyName" placeholder="名字" maxlength="25" />
                 </div>
-				<div>
-                    <img src="{% static 'images/rightform2.png' %}"/>
-                    <input type="text" name="mobile" id="companyMobile" placeholder="联系电话"/>
-                </div>
-				<div>
-                    <img src="{% static 'images/rightform3.png' %}"/>
-                    <input type="text" name="course_name" id="companyAddress" placeholder="课程名" maxlength="50" />
-                </div>
+                <textarea style="resize: none;width: 216px;height: 122px" >请输入内容</textarea>
+
                 <p class="error company-tips" id="jsCompanyTips"></p>
-				<input class="btn" type="text" id="jsStayBtn" value="立即咨询 >" />
+				<input class="btn" type="text" id="jsStayBtn" value="快速发布 >" />
+
             {% csrf_token %}
             </form>
 		</div>
@@ -131,7 +122,7 @@
 		<div class="right companyrank layout">
 			<div class="head">推荐话题</div>
 
-            {% for curent_org in hot_orgs %}
+            {% for curent_org in hot_topic %}
                 <dl class="des">
 {#                forloop是显示排名数字的#}
                     <dt class="num fl">{{ forloop.counter }}</dt>
@@ -149,3 +140,18 @@
 </section>
 {% endblock %}
 
+{% block custom_css %}
+    <style>
+        .new_button{
+            padding-top: 3px;
+            text-align: center;
+            display: block;
+            width: 240px;
+            height:30px;
+            font-size: 25px;
+            color: white;
+            background-color: #4d555d;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock %}

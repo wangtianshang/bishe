@@ -90,17 +90,18 @@ class LoginView(View):
         return render(request, "login.html", {})
     def post(self, request):
         login_form = LoginForm(request.POST)
-        print(login_form)
+        # print(login_form)
         if login_form.is_valid():#用来验证前端的数据是否出现错误
             user_name = request.POST.get("username", "")
             pass_word = request.POST.get("password", "")
-            print(user_name)
-            print(pass_word)
+
             user = authenticate(username=user_name, password=pass_word)#该部位没有匹配到数据
-            print(user)
+
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    request.session['uid'] = user.id
+                    # print(user.id)
                     return HttpResponseRedirect(reverse("index"))
                 else:
                     return render(request, "login.html", {"msg":"用户未激活！"})

@@ -3423,6 +3423,8 @@ footer .footer .line {
     padding-left: 18px;
     color: #848484;
     overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
 }
 
 .butler_list .cont li {
