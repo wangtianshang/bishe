@@ -7,6 +7,7 @@ from .models import Node,Topic
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
+#话题
 class CommunView(View):
     def get(self,request):
         #取出节点
@@ -54,3 +55,8 @@ class CommunView(View):
             "sort":sort,
             "hot_topic":hot_topic,
         })
+
+#话题详情
+class Topic_detailView(View):
+    def get(self,request):
+        return render(request,'huati_text.html')

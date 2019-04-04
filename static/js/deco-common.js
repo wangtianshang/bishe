@@ -72,6 +72,8 @@ function search_click(){
         request_url = "/org/teacher/list?keywords="+keywords
     }else if(type == "org"){
         request_url = "/org/list?keywords="+keywords
+    }else if(type == "topic"){
+        request_url = "/topic/list?keywords="+keywords
     }
     window.location.href = request_url
 }
