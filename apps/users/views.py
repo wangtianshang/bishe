@@ -100,6 +100,7 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    #把用户id存进session
                     request.session['uid'] = user.id
                     # print(user.id)
                     return HttpResponseRedirect(reverse("index"))

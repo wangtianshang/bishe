@@ -76,7 +76,7 @@
                                 <li data-value="course">公开课</li>
                                 <li data-value="org">课程机构</li>
                                 <li data-value="teacher">授课老师</li>
-                                <li data-value="topic">授课老师</li>
+                                <li data-value="topic">社区</li>
                             </ul>
                         </div>
                         <input id="search_keywords" class="fl" type="text" value="" placeholder="请输入搜索内容"/>
@@ -113,7 +113,7 @@
 </section>
 <!--crumbs start-->
 
-    <section>
+<section>
 	<div class="wp">
 		<div class="crumbs">
 			<ul>
@@ -128,22 +128,20 @@
 
     <div id="main">
     <div class="course-infos">
+
         <div class="w pr" style="background-color: white;height: 50px">
             <div class="hd">
-                <h2 class="l" style="color: black">django与vuejs实战项目2</h2>
+                <h2 class="l" style="color: black">{{ topic_xiang.name }}</h2>
             </div>
         </div>
         <div class="xiangqing">
             <h3 style="font-size: 20px">话题详情：</h3>
                 <p>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我是一个少年了，尽管我还是那么黑，那么瘦小，但我知道，也只认一个理，当别人没感觉到，无动于衷的时候，我得在这个世界上坚持一些什么东西，尽管它显得微不足道，但我还是得一如既往的坚持，往前走一走是不是会更好，有时候我会想放弃一切，想远离一切，可，，最有大多都有一个相同的结果，选择不放弃，选择坚持。
-我从小到大没什么优点，要说有，就是比身边的人多了那么一点坚持，2018年转瞬即逝，2019年的快速到来，我不能把时间改变，就只能改变自己。上个月，我大部分是疲劳的，与时间耗着，打了一场耗时战，这次我转变了战策，准备打时间利用战，计量把握好白天的时间，加之白天利用，才过了一天，我感觉自己很是精神，状态也好多了，我只想说2019年，我将会是一个不一样的我。
-陌生人，我不知道怎样鼓励身处困境的你，我只能以我自己的方式来对你说，向着光亮的地方前进，世界上有很多的人有不同的观点，但我觉得，与其放弃，不如好好坚持一场
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ topic_xiang.content }}
                 </p>
             </div>
         </div>
     <div class="course-info-main clearfix w has-progress">
-
         <div class="info-bar clearfix">
             <div class="content-wrap clearfix" style="padding-right: 0">
                 <div class="content">
@@ -270,7 +268,7 @@
 
                             <li class="post-row">
                                 <div class="media">
-                                    <span target="_blank"><img src='{{ MEDIA_URL }}/image/2016/12/default_big_14.png' width='40' height='40' /></span>
+                                    <span target="_blank"><img src='{{ MEDIA_URL }}image/2016/12/default_big_14.png' width='40' height='40' /></span>
                                 </div>
                                 <div class="bd">
                                     <div class="tit">
@@ -285,7 +283,7 @@
 
                             <li class="post-row">
                                 <div class="media">
-                                    <span target="_blank"><img src='{{ MEDIA_URL }}/image/2016/12/default_big_14.png' width='40' height='40' /></span>
+                                    <span target="_blank"><img src='{{ MEDIA_URL }}image/2016/12/default_big_14.png' width='40' height='40' /></span>
                                 </div>
                                 <div class="bd">
                                     <div class="tit">

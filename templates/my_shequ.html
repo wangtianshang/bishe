@@ -99,11 +99,6 @@
 		</div>
 	</div>
 	<div class="right companyright" style="background-color: white">
-{#        <form id="my_submit" action="{% url 'topic:topic_list' %}" method="get" autocomplete="off">#}
-{#            <a style="cursor: pointer" class="new_button" onclick="document:my_submit.submit()">我发布的</a>#}
-{#            {% csrf_token %}#}
-{#        </form>#}
-            <a href="{% url 'topic:my_topic_list' %}" class="new_button">我发布的</a>
             <hr>
             <a href="{% url 'topic:topic_send' %}" class="new_button">我要发布</a>
 			<hr>

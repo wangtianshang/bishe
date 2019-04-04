@@ -7,8 +7,59 @@ from .models import Node,Topic
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
-#话题
+#社区之我的话题
+class MyTopicView(View):
+    def get(self,request):
+        # 取出节点
+        all_node = Node.objects.all()
+        # 取出用户的话题
+        all_topic = Topic.objects.filter(topic_uid=request.session.get('uid', 0))
+        print(all_topic)
+        # 话题总数
+        nums = all_topic.count()
+
+        # 推荐话题从全部话题中随机选择三个
+        hot_topic = random.sample(list(Topic.objects.all()), 3)
+        print(request.session.get('uid', 0))  # 取出用户id
+        # hot_topic = all_topic.order_by("-click_nums")[:3]  # 按照点击数排名
+        # 取出选择的节点
+        node_id = request.GET.get('node', "")
+        if node_id:
+            # 从话题里面找出某个节点的所有数据
+            all_topic = all_topic.filter(topic_node_id=int(node_id))
+
+        # 按照最新或者最热进行排序
+        sort = request.GET.get('sort', "")
+        if sort:
+            # 安添加时间取最新
+            if sort == "addtime":
+                all_topic = all_topic.order_by("-add_time")
+                # 按点击数为最热
+            elif sort == "clicknum":
+                all_topic = all_topic.order_by("-click_num")
+
+        # 对话题进行分页
+        try:
+            # get page不用管，可以取到
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        # 5代表的是5个数据一页
+        p = Paginator(all_topic, 3, request=request)
+        topics = p.page(page)
+
+        return render(request, "my_shequ.html", {
+            'all_node': all_node,
+            'all_topic': topics,
+            "nums": nums,
+            "node_id": node_id,
+            "sort": sort,
+            "hot_topic": hot_topic,
+        })
+#社区
 class CommunView(View):
+
+    #get方法解决的是所有的话题
     def get(self,request):
         #取出节点
         all_node = Node.objects.all()
@@ -16,10 +67,12 @@ class CommunView(View):
         all_topic = Topic.objects.all()
         #话题总数
         nums = all_topic.count()
+        #属于某个用户的话题话题
+        my_topic = Topic.objects.filter(topic_uid=request.session.get('uid', 0))
 
         #推荐话题随机选择三个
         hot_topic = random.sample(list(all_topic),3)
-        # print(request.session.get('uid', 0))#取出用户id
+        print(request.session.get('uid', 0))#取出用户id
         # hot_topic = all_topic.order_by("-click_nums")[:3]  # 按照点击数排名
         #取出选择的节点
         node_id = request.GET.get('node', "")
@@ -54,9 +107,20 @@ class CommunView(View):
             "node_id":node_id,
             "sort":sort,
             "hot_topic":hot_topic,
+            "my_topic":my_topic,
         })
 
 #话题详情
 class Topic_detailView(View):
+    def get(self,request,topic_id):
+        topic_xiang = Topic.objects.get(id=int(topic_id))
+        topic_xiang.click_num+=1
+        topic_xiang.save()
+        return render(request,'huati_text.html',
+                      {
+                        "topic_xiang":topic_xiang
+                      })
+
+class Topic_sendView(View):
     def get(self,request):
-        return render(request,'huati_text.html')
+        return render(request,'topic_add.html')

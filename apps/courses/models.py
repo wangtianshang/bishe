@@ -93,7 +93,7 @@ class Video(models.Model):
     def __str__(self):
         return self.name
 
-
+#课程资源
 class CourseResource(models.Model):
     course = models.ForeignKey(Course, verbose_name=u"课程")
     name = models.CharField(max_length=100, verbose_name=u"名称")

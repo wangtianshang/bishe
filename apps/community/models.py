@@ -20,6 +20,8 @@ class Node(models.Model):
 
 #话题表
 class Topic(models.Model):
+    #该话题属于哪个用户
+    topic_uid = models.IntegerField(default=0,verbose_name=u"用户")
     topic_node = models.ForeignKey(Node,verbose_name=u"所属节点", null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name=u"话题名")
     content = models.TextField(max_length=1000,verbose_name=u"话题内容")
@@ -28,6 +30,7 @@ class Topic(models.Model):
     floor = models.IntegerField(default=0,verbose_name=u"层级")
     number = models.IntegerField(default=0,verbose_name=u"评论数")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    image = models.ImageField(upload_to="topic/%Y/%m", verbose_name=u"话题封面", max_length=100)
 
     class Meta:
         verbose_name = u"话题"
