@@ -165,11 +165,11 @@
                                 {% for foo in topic_xiang.pinglun_set.get_queryset %}
                                     <li class="post-row">
                                 <div class="media">
-                                    <span target="_blank"><img src='{{ MEDIA_URL }}image/2016/12/default_big_14.png' width='40' height='40' /></span>
+                                    <span target="_blank"><img src='{{ MEDIA_URL }}{{ foo.image }}' width='40' height='40' /></span>
                                 </div>
                                 <div class="bd">
                                     <div class="tit">
-                                        <span target="_blank">bobby</span>
+                                        <span target="_blank">{{ foo.mubiao_user_name }}</span>
                                     </div>
                                     <p class="cnt">{{ foo.pinglun_text }}</p>
                                     <div class="footer clearfix">
@@ -222,7 +222,7 @@
 				</ul>
 
 			</div>
-			<p class="line"></p>
+
 			<div class="wp clear">
                 <span class="fl">? 2016 www.projectsedu.com 慕学在线-在线学习交流平台 保留所有权利</span>
                 <span class="fr">copyright ? 2016 ICP备案证书号：蜀ICP备xxxxx号-1</span>
