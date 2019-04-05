@@ -38,3 +38,18 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class PingLun(models.Model):
+    pinglun_topic = models.ForeignKey(Topic,verbose_name=u"所属话题", null=True, blank=True)#相当于话题id
+    cengji = models.IntegerField(default=1,verbose_name=u"层级")
+    mubiao_user = models.IntegerField(default=1,verbose_name=u"话题所属用户")#相当于话题用户id
+    pinglun_text = models.CharField(max_length=300,verbose_name=u"评论内容")
+    pinglun_user = models.IntegerField(verbose_name=u"评论者")#相当于评论用户id
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    class Meta:
+        verbose_name = u"话题评论"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

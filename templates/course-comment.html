@@ -201,7 +201,7 @@
     //添加评论
     $('#js-pl-submit').on('click', function(){
         var comments = $("#js-pl-textarea").val()
-        alert(comments)
+
         if(comments == ""){
             alert("评论不能为空")
             return
@@ -222,8 +222,8 @@
                     }else{
                         alert(data.msg)
                     }
-
                 }else if(data.status == 'success'){
+                    alert("成功")
                     window.location.reload();//刷新当前页面.
                 }
             },

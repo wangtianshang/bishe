@@ -1,8 +1,9 @@
 # _*_ encoding:utf-8 _*_
 import random
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 from django.views.generic.base import View
-from .models import Node,Topic
+from .models import Node,Topic,PingLun
+from users.models import UserProfile
 #用来制作分页
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -114,13 +115,43 @@ class CommunView(View):
 class Topic_detailView(View):
     def get(self,request,topic_id):
         topic_xiang = Topic.objects.get(id=int(topic_id))
+        # print(topic_xiang.topic_uid)#打印用户id
         topic_xiang.click_num+=1
         topic_xiang.save()
         return render(request,'huati_text.html',
                       {
                         "topic_xiang":topic_xiang
                       })
-
+#添加话题
 class Topic_sendView(View):
     def get(self,request):
         return render(request,'topic_add.html')
+
+
+#增加评论
+class TopicAddView(View):
+    """
+    用户添加话题评论
+    """
+    def post(self, request):
+
+        if not request.user.is_authenticated():
+            #判断用户登录状态
+            return HttpResponse('{"status":"fail", "msg":"用户未登录"}', content_type='application/json')
+        userid = request.POST.get("userid", 0)#用户id
+        huatiid = request.POST.get("huatiid", 0)#话题id
+        comments = request.POST.get("comments", "")#评论内容
+        print(userid)##读出来的id是字符串
+        print(huatiid)##读出来的id是字符串
+        print(comments)#这个是写入的数据
+        if int(huatiid) > 0 and comments:
+            topic_pinglun = PingLun()
+            huati = Topic.objects.get(id=int(huatiid))
+            topic_pinglun.pinglun_topic = huati
+            topic_pinglun.mubiao_user = userid
+            topic_pinglun.pinglun_text = comments
+            topic_pinglun.pinglun_user = request.user.id
+            topic_pinglun.save()
+            return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
