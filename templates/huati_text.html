@@ -21,7 +21,7 @@
     <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
 
 </head>
-<body>
+<body onclick="quxiaohuifu()">
 <section class="headerwrap ">
     <header>
 		<div  class=" header">
@@ -260,8 +260,18 @@
 <script type="text/javascript">
     //点击回复文本框和按钮显示出来
     function addhuifu() {
-        document.getElementById("js-pl-input-fake1").style.display="block"
-        document.getElementById("js-pl-submit2").style.display="block"
+        var trag = document.getElementById("js-pl-input-fake1")
+        var trag2 = document.getElementById("js-pl-submit2")
+        if (trag.style.display == "none" && trag.style.display == "none") {
+            trag.style.display = "block"
+            trag2.style.display = "block"
+        }
+        else if (trag.style.display == "block" && trag.style.display == "block") {
+            trag.style.display = "none"
+            trag2.style.display = "none"
+        }
+{#        document.getElementById("js-pl-input-fake1").style.display="block"#}
+{#        document.getElementById("js-pl-submit2").style.display="block"#}
     }
 
     //添加评论

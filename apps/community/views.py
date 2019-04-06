@@ -1,12 +1,12 @@
 # _*_ encoding:utf-8 _*_
 import random
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.views.generic.base import View
 from .models import Node,Topic,PingLun
 from users.models import UserProfile
 #用来制作分页
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-
+from .forms import UploadImageForm
 # Create your views here.
 #社区之我的话题
 class MyTopicView(View):
@@ -15,7 +15,7 @@ class MyTopicView(View):
         all_node = Node.objects.all()
         # 取出用户的话题
         all_topic = Topic.objects.filter(topic_uid=request.session.get('uid', 0))
-        print(all_topic)
+        # print(all_topic)
         # 话题总数
         nums = all_topic.count()
 
@@ -126,8 +126,44 @@ class Topic_detailView(View):
 #添加话题
 class Topic_sendView(View):
     def get(self,request):
-        return render(request,'topic_add.html')
+        all_node = Node.objects.all()
+        return render(request,'topic_add.html',{
+            "all_node":all_node
+        })
 
+    def post(self,request):
+        image_form = UploadImageForm(request.POST, request.FILES)
+        if image_form.is_valid():
+            image = image_form.cleaned_data['image']
+            name = request.POST.get("name", "")
+            jiedian = request.POST.get("jiedian", "其他")
+            jiedian_node = Node.objects.filter(name=jiedian)
+            message = request.POST.get("message", "")
+            # image = request.POST.get("image", "")
+            topic = Topic()
+            topic.topic_uid = request.user.id
+            topic.topic_node = jiedian_node[0]
+            topic.name = name
+            topic.content = message
+            topic.image = image
+            topic.save()
+        return HttpResponse('ok')
+
+#快速添加话题
+class Topic_sendView2(View):
+    def post(self,request):
+        name = request.POST.get('name', '')
+        message = request.POST.get('message', '')
+        jiedian_node = Node.objects.filter(name="其他")
+        image = "topic/2019/04/other.jpg"
+        topic = Topic()
+        topic.topic_uid = request.user.id
+        topic.topic_node = jiedian_node[0]
+        topic.name = name
+        topic.content = message
+        topic.image = image
+        topic.save()
+        return render(request,"shequ.html")
 
 #增加评论
 class TopicAddView(View):
@@ -157,6 +193,9 @@ class TopicAddView(View):
             topic_pinglun.mubiao_user_name = request.user
             topic_pinglun.image = image
             topic_pinglun.save()
+            topic_xiang = Topic.objects.get(id=int(huatiid))
+            topic_xiang.number += 1
+            topic_xiang.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')

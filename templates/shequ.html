@@ -107,17 +107,16 @@
             <hr>
             <a href="{% url 'topic:topic_send' %}" class="new_button">我要发布</a>
 			<hr>
-			<form class="rightform" style="height: 200px" id="jsStayForm">
+			<form action="{% url 'topic:topic_send2' %}" class="rightform" style="height: 200px" id="jsStayForm" method="post" >
 				<div style="margin-top: 1px">
                     <img src="{% static 'images/rightform1.png' %}"/>
                     <input type="text" name="name" id="companyName" placeholder="名字" maxlength="25" />
                 </div>
-                <textarea placeholder="请输入内容" style="resize: none;width: 216px;height: 122px" ></textarea>
+                <textarea name="message" placeholder="请输入内容" style="resize: none;width: 216px;height: 122px" ></textarea>
 
                 <p class="error company-tips" id="jsCompanyTips"></p>
-				<input class="btn" type="text" id="jsStayBtn" value="快速发布 >" />
-
-            {% csrf_token %}
+				<input class="btn" type="submit" id="jsStayBtn" value="快速发布 >" />
+                {% csrf_token %}
             </form>
 		</div>
 
