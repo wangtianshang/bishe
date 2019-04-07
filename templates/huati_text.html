@@ -174,22 +174,30 @@
                                     <p class="cnt">{{ foo.pinglun_text }}</p>
                                     <div class="footer clearfix" id="1">
                                         <span title="创建时间" class="l timeago">{{ foo.add_time }}</span>
+                                        <input id="foo3" type="hidden" value="{{ foo.mubiao_user_name }}">
+                                        <input id="foo2" type="hidden" value="{{ foo.mubiao_user }}">
                                         <button style="margin-left: 10px" class="button_click" id="button_id">回复</button>
+                                        <input id="foo" type="hidden" value="{{ foo.id }}">
+
                                     </div>
                                 </div>
-                                <div class="media" style="margin-left: 60px">
-                                    <span target="_blank"><img src='{{ MEDIA_URL }}image/2016/12/default_big_14.png' width='40' height='40' /></span>
-                                </div>
-                                <div class="bd" style="margin-left: 60px">
-                                    <div class="tit">
-                                        <span target="_blank">bobby</span>
+                                {% for foo2 in foo.huifu_set.get_queryset %}
+                                    <div class="media" style="margin-left: 60px">
+                                        <span target="_blank"><img src='{{ MEDIA_URL }}{{ foo2.image }}' width='40' height='40' /></span>
                                     </div>
-                                    <p class="cnt">看到第三章了，虽然有些知识还不是听得很懂，但是感觉很有用的样子，想的是先听完一遍再说。然后再来听第二遍。最后想说老师棒棒哒！！！</p>
-                                    <div class="footer clearfix"style="margin-left: 60px">
-                                        <span title="创建时间" class="l timeago">时间：2016年12月13日 22:14</span>
-                                        <button style="margin-left: 10px">回复</button>
+                                    <div class="bd" style="margin-left: 60px">
+                                        <div class="tit">
+                                            <span target="_blank">{{ foo2.huifu_user_name }}{{ "@" }}{{ foo2.mubiao_user_name }}</span>
+                                        </div>
+                                        <p class="cnt">{{ foo2.pinglun_text }}</p>
+                                        <div class="footer clearfix"style="margin-left: 60px">
+                                            <span title="创建时间" class="l timeago">时间：{{ foo2.add_time }}</span>
+                                            <button style="margin-left: 10px">回复</button>
+                                        </div>
                                     </div>
-                                </div>
+                                {% endfor %}
+
+
                             </li>
                                 {% endfor %}
 
@@ -278,15 +286,48 @@
         this.parentNode.appendChild(div1)
         this.parentNode.appendChild(inp)
 {#        this.style.display="none"#}
+{#        foo代表的是该条评论的id#}
+{#        inp代表我创建的input#}
+{#        div1代表我创建的div#}
+        foo3 = this.parentNode.children[1].value
+        foo2 = this.previousElementSibling.value
+        foo = this.nextElementSibling.value
         inp.onclick = function () {
-            addhuifu()
+            addhuifu(foo,foo2,foo3,inp,trea,div1)
         }
     });
-    function addhuifu() {
+    function addhuifu(foo,foo2,foo3,inp,trea,div1) {
+{#        document.getElementById("js-pl-input-fake1").style.display="none"#}
+{#        document.getElementById("js-pl-submit2").style.display="none"#}
+        inp.style.display="none"
+        div1.style.display="none"
+{#        获得输入的回复信息#}
+        var comments = trea.value
 
-        document.getElementById("js-pl-input-fake1").style.display="none"
-        document.getElementById("js-pl-submit2").style.display="none"
-
+        if(comments == ""){
+            alert("回复不能为空")
+            return
+        }
+        var token = $('input[name=csrfmiddlewaretoken]').val(); // 根据名称获取值
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url:"/topic/add_huifu/",
+            data:{'pinglun_id':foo,'pinglun_user':foo2,'pinglun_user_name':foo3, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
+            async: true,
+            success: function(data) {
+                if(data.status == 'fail'){
+                    if(data.msg == '用户未登录'){
+                        window.location.href="/login/";
+                    }else{
+                        alert(data.msg)
+                    }
+                }else if(data.status == 'success'){
+                    alert("ok")
+                    window.location.reload();//刷新当前页面.
+                }
+            },
+        });
 {#        var a = document.getElementById("button_id")#}
 {#        a.nextElementSibling.style.display="none"#}
 {#        alert(a.parentNode.children[2])#}

@@ -16,7 +16,7 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url, include
-from .views import CommunView,Topic_detailView,Topic_sendView,MyTopicView,TopicAddView,Topic_sendView2
+from .views import CommunView,Topic_detailView,Topic_sendView,MyTopicView,TopicAddView,Topic_sendView2,HuiFuAddView
 
 
 #IndexView.as_view()把类转换成view函数
@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^send/$', Topic_sendView.as_view(), name="topic_send"),
     url(r'^send2/$', Topic_sendView2.as_view(), name="topic_send2"),
     url(r'^add_comment/$', TopicAddView.as_view(), name="pinglun_add"),
+    url(r'^add_huifu/$', HuiFuAddView.as_view(), name="huifu_add"),
 
 ]
 

@@ -53,13 +53,21 @@ class PingLun(models.Model):
         verbose_name = u"话题评论"
         verbose_name_plural = verbose_name
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.mubiao_user_name
 
-# #
-# class HuiFu(models.Model):
-#     huifu_pinglun = models.ForeignKey(PingLun,verbose_name=u'所属评论')
-#     cengji = models.IntegerField(default=2, verbose_name=u"层级")
-#     pinglun_text = models.CharField(max_length=300, verbose_name=u"回复内容")
-#     mubiao_user = models.IntegerField(verbose_name=u"评论所属用户")  # 相当于话题用户id
-#     reply_id = models.IntegerField(default=1, verbose_name=u"回复目标id")
+class HuiFu(models.Model):
+    huifu_pinglun = models.ForeignKey(PingLun,verbose_name=u'所属评论')
+    cengji = models.IntegerField(verbose_name=u"层级")
+    pinglun_text = models.CharField(max_length=300, verbose_name=u"回复内容")
+    mubiao_user = models.IntegerField(verbose_name=u"评论所属用户")
+    mubiao_user_name = models.CharField(default="",max_length=20, verbose_name=u'被回复用户名字')  # 评论者用户名
+    huifu_user = models.IntegerField(verbose_name=u"回复者")
+    huifu_user_name = models.CharField(default="",max_length=20, verbose_name=u'用户名字')  # 评论者用户名
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    image = models.CharField(default="", max_length=300, verbose_name=u"图片路径")
+    class Meta:
+        verbose_name = u"评论回复"
+        verbose_name_plural = verbose_name
+
+
