@@ -209,7 +209,10 @@
                                             <p class="cnt">{{ foo3.text }}</p>
                                             <div class="footer clearfix"style="margin-left: 60px">
                                                 <span title="创建时间" class="l timeago">{{ foo3.add_time }}</span>
-                                                <button style="margin-left: 10px" class="">回复</button>
+                                                <input  type="hidden" value="{{ foo3.huifu_user_name }}">
+                                                <input  type="hidden" value="{{ foo3.mubiao_user }}">
+                                                <button style="margin-left: 10px" class="button_click3">回复</button>
+                                                <input  type="hidden" value="{{ foo2.id }}">
                                             </div>
                                         </div>
                                     {% endfor %}
@@ -279,6 +282,42 @@
 <script type="text/javascript">
 {#    回复的回复#}
     $('.button_click2').on('click', function() {
+
+        var trea = document.createElement("textarea")
+        trea.setAttribute('placeholder','你好')
+        trea.id = 'js-pl-textarea2'
+        var div1 = document.createElement("div")
+        div1.style.width="auto"
+        div1.className='wgt-ipt-wrap pub-editor-wrap'
+        div1.id='js-pl-input-fake1'
+        div1.style.display = "block"
+        div1.appendChild(trea)
+
+        var inp = document.createElement("input")
+        inp.id = "js-pl-submit2"
+        inp.className = "pub-btn"
+        inp.setAttribute("type","button")
+        inp.setAttribute("data-cid","452")
+        inp.setAttribute("value","提交")
+        inp.style.display = "block"
+
+        this.parentNode.appendChild(div1)
+        this.parentNode.appendChild(inp)
+
+{#        foo代表的是该条评论的id#}
+{#        inp代表我创建的input#}
+{#        div1代表我创建的div#}
+{#        foo2代表用户名#}
+{#        foo3代表用户id#}
+        foo3 = this.parentNode.children[1].value
+        foo2 = this.previousElementSibling.value
+        foo = this.nextElementSibling.value
+        inp.onclick = function () {
+            addhuifu2(foo,foo2,foo3,inp,trea,div1)
+        }
+    });
+
+    $('.button_click3').on('click', function() {
 
         var trea = document.createElement("textarea")
         trea.setAttribute('placeholder','你好')
