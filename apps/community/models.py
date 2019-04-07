@@ -56,10 +56,10 @@ class PingLun(models.Model):
     def __str__(self):
         return self.name
 
-#
+# #
 # class HuiFu(models.Model):
 #     huifu_pinglun = models.ForeignKey(PingLun,verbose_name=u'所属评论')
 #     cengji = models.IntegerField(default=2, verbose_name=u"层级")
 #     pinglun_text = models.CharField(max_length=300, verbose_name=u"回复内容")
 #     mubiao_user = models.IntegerField(verbose_name=u"评论所属用户")  # 相当于话题用户id
-    # reply_id = models.IntegerField(default=1, verbose_name=u"回复目标id")
+#     reply_id = models.IntegerField(default=1, verbose_name=u"回复目标id")
