@@ -2,7 +2,7 @@
 import random
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.views.generic.base import View
-from .models import Node,Topic,PingLun,HuiFu
+from .models import Node,Topic,PingLun,HuiFu,HuiFuHuiFu
 from users.models import UserProfile
 #用来制作分页
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
@@ -216,7 +216,7 @@ class HuiFuAddView(View):
         comments = request.POST.get("comments")
         #判断自己不能评论自己
         if str(request.user) == pinglun_user_name:
-            return HttpResponse('{"status":"fail", "msg":"不能自己评论自己"}', content_type='application/json')
+            return HttpResponse('{"status":"fail", "msg":"不能自己回复自己的评论"}', content_type='application/json')
 
         if int(pinglun_id) > 0:
             topic_huifu = HuiFu()
@@ -234,3 +234,36 @@ class HuiFuAddView(View):
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
                 return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
+
+class NewHuiFuAddView(View):
+    def post(self,request):
+        image = ""
+        if not request.user.is_authenticated():
+            # 判断用户登录状态
+            return HttpResponse('{"status":"fail", "msg":"用户未登录"}', content_type='application/json')
+        if request.session.get('uid'):
+            image = UserProfile.objects.get(id=request.session.get('uid')).image  # 取出用户头像路径
+        huifu_id = request.POST.get("huifu_id")
+        huifu_user = request.POST.get("huifu_user")
+        huifu_user_name = request.POST.get("huifu_user_name")
+        comments = request.POST.get("comments")
+        # 判断自己不能回复自己
+        if str(request.user) == huifu_user_name:
+            return HttpResponse('{"status":"fail", "msg":"不能自己回复自己"}', content_type='application/json')
+
+        if int(huifu_id) > 0:
+            topic_huifu = HuiFuHuiFu()
+            suoshu_huifu = HuiFu.objects.get(id=int(huifu_id))
+            print(suoshu_huifu)
+            topic_huifu.huifu_huifu = suoshu_huifu
+            topic_huifu.cengji = 3
+            topic_huifu.text = comments
+            topic_huifu.mubiao_user = huifu_user  # 这个是该条回复的所有者
+            topic_huifu.mubiao_user_name = huifu_user_name#所有者名字
+            topic_huifu.huifu_user = request.user.id  # 这个是回复者id（即是回复那条回复的人）
+            topic_huifu.huifu_user_name = request.user#回复者名字
+            topic_huifu.image = image
+            topic_huifu.save()
+            return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
+        else:
+            return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')

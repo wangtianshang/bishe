@@ -1,5 +1,5 @@
 import xadmin
-from .models import Node,Topic,PingLun,HuiFu
+from .models import Node,Topic,PingLun,HuiFu,HuiFuHuiFu
 
 class NodeAdmin(object):
     list_display = ['name','add_time']
@@ -25,7 +25,16 @@ class HuiFuAdmin(object):
     search_fields = ['huifu_pinglun', 'cengji', 'pinglun_text', 'huifu_user_name', 'mubiao_user_name']
     list_filter = ['huifu_pinglun', 'cengji', 'pinglun_text', 'huifu_user_name', 'mubiao_user_name']
 
+
+class HuiFuHuiFuAdmin(object):
+
+    list_display = ['huifu_huifu', 'cengji', 'text', 'huifu_user_name', 'mubiao_user_name']
+    search_fields = ['huifu_huifu', 'cengji', 'text', 'huifu_user_name', 'mubiao_user_name']
+    list_filter = ['huifu_huifu', 'cengji', 'text', 'huifu_user_name', 'mubiao_user_name']
+
+
 xadmin.site.register(Node, NodeAdmin)
 xadmin.site.register(Topic, TopicAdmin)
 xadmin.site.register(PingLun, PingLunAdmin)
 xadmin.site.register(HuiFu, HuiFuAdmin)
+xadmin.site.register(HuiFuHuiFu, HuiFuHuiFuAdmin)

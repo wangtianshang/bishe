@@ -191,10 +191,29 @@
                                         </div>
                                         <p class="cnt">{{ foo2.pinglun_text }}</p>
                                         <div class="footer clearfix"style="margin-left: 60px">
-                                            <span title="创建时间" class="l timeago">时间：{{ foo2.add_time }}</span>
-                                            <button style="margin-left: 10px">回复</button>
+                                            <span title="创建时间" class="l timeago">{{ foo2.add_time }}</span>
+                                            <input  type="hidden" value="{{ foo2.huifu_user_name }}">
+                                            <input  type="hidden" value="{{ foo2.mubiao_user }}">
+                                            <button style="margin-left: 10px" class="button_click2">回复</button>
+                                            <input  type="hidden" value="{{ foo2.id }}">
                                         </div>
                                     </div>
+                                    {% for foo3 in foo2.huifuhuifu_set.get_queryset %}
+                                        <div class="media" style="margin-left: 120px">
+                                            <span target="_blank"><img src='{{ MEDIA_URL }}{{ foo3.image }}' width='40' height='40' /></span>
+                                        </div>
+                                        <div class="bd" style="margin-left: 60px">
+                                            <div class="tit">
+                                                <span target="_blank">{{ foo3.huifu_user_name }}{{ " @ " }}{{ foo3.mubiao_user_name }}</span>
+                                            </div>
+                                            <p class="cnt">{{ foo3.text }}</p>
+                                            <div class="footer clearfix"style="margin-left: 60px">
+                                                <span title="创建时间" class="l timeago">{{ foo3.add_time }}</span>
+                                                <button style="margin-left: 10px" class="">回复</button>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
                                 {% endfor %}
 
 
@@ -258,12 +277,8 @@
 <script src="{% static 'js/deco-common.js' %}"  type="text/javascript"></script>
 
 <script type="text/javascript">
-
-    $('.button_click').on('click', function() {
-{#        <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake1"style="width: auto">#}
-{#            <textarea  id="js-pl-textarea2" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" ></textarea>#}
-{#        </div>#}
-{#        <input type="button" id="js-pl-submit2" class="pub-btn" data-cid="452" value="提交">#}
+{#    回复的回复#}
+    $('.button_click2').on('click', function() {
 
         var trea = document.createElement("textarea")
         trea.setAttribute('placeholder','你好')
@@ -285,6 +300,75 @@
 
         this.parentNode.appendChild(div1)
         this.parentNode.appendChild(inp)
+
+{#        foo代表的是该条评论的id#}
+{#        inp代表我创建的input#}
+{#        div1代表我创建的div#}
+{#        foo2代表用户名#}
+{#        foo3代表用户id#}
+        foo3 = this.parentNode.children[1].value
+        foo2 = this.previousElementSibling.value
+        foo = this.nextElementSibling.value
+        inp.onclick = function () {
+            addhuifu2(foo,foo2,foo3,inp,trea,div1)
+        }
+    });
+
+    function addhuifu2(foo,foo2,foo3,inp,trea,div1) {
+         inp.style.display="none"
+        div1.style.display="none"
+{#        获得输入的回复信息#}
+        var comments = trea.value
+        if(comments == ""){
+            alert("回复不能为空")
+            return
+        }
+        var token = $('input[name=csrfmiddlewaretoken]').val(); // 根据名称获取值
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url:"/topic/add_newhuifu/",
+            data:{'huifu_id':foo,'huifu_user':foo2,'huifu_user_name':foo3, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
+            async: true,
+            success: function(data) {
+                if(data.status == 'fail'){
+                    if(data.msg == '用户未登录'){
+                        window.location.href="/login/";
+                    }else{
+                        alert(data.msg)
+                    }
+                }else if(data.status == 'success'){
+                    alert("ok")
+                    window.location.reload();//刷新当前页面.
+                }
+            },
+        });
+    }
+
+{#回复评论#}
+    $('.button_click').on('click', function() {
+
+        var trea = document.createElement("textarea")
+        trea.setAttribute('placeholder','你好')
+        trea.id = 'js-pl-textarea2'
+        var div1 = document.createElement("div")
+        div1.style.width="auto"
+        div1.className='wgt-ipt-wrap pub-editor-wrap'
+        div1.id='js-pl-input-fake1'
+        div1.style.display = "block"
+        div1.appendChild(trea)
+
+        var inp = document.createElement("input")
+        inp.id = "js-pl-submit2"
+        inp.className = "pub-btn"
+        inp.setAttribute("type","button")
+        inp.setAttribute("data-cid","452")
+        inp.setAttribute("value","提交")
+        inp.style.display = "block"
+
+        this.parentNode.appendChild(div1)
+        this.parentNode.appendChild(inp)
+
 {#        this.style.display="none"#}
 {#        foo代表的是该条评论的id#}
 {#        inp代表我创建的input#}
@@ -295,15 +379,13 @@
         inp.onclick = function () {
             addhuifu(foo,foo2,foo3,inp,trea,div1)
         }
+
     });
     function addhuifu(foo,foo2,foo3,inp,trea,div1) {
-{#        document.getElementById("js-pl-input-fake1").style.display="none"#}
-{#        document.getElementById("js-pl-submit2").style.display="none"#}
         inp.style.display="none"
         div1.style.display="none"
 {#        获得输入的回复信息#}
         var comments = trea.value
-
         if(comments == ""){
             alert("回复不能为空")
             return
@@ -328,42 +410,10 @@
                 }
             },
         });
-{#        var a = document.getElementById("button_id")#}
-{#        a.nextElementSibling.style.display="none"#}
-{#        alert(a.parentNode.children[2])#}
-
-{#        butt = document.getElementsByClassName("button_click")#}
-{#        alert(butt)#}
-{#        butt.style.display="block"#}
 
     }
-{#    $('#js-pl-submit2').on('click', function() {#}
-{#        alert#}
-{#        this.style.disply="none"#}
-{#    });#}
-
 
     //点击回复文本框和按钮显示出来
-{#    function addhuifu() {#}
-{#            #}
-{#        var trag = document.getElementById("js-pl-input-fake1")#}
-{##}
-{#        var trag = document.getElementById("js-pl-input-fake1")#}
-{#        var trag2 = document.getElementById("js-pl-submit2")#}
-{#        if (trag.style.display == "none" && trag.style.display == "none") {#}
-{#            trag.style.display = "block"#}
-{#            trag2.style.display = "block"#}
-{#        }#}
-{#        else if (trag.style.display == "block" && trag.style.display == "block") {#}
-{#            trag.style.display = "none"#}
-{#            trag2.style.display = "none"#}
-{#        }#}
-{##}
-{##}
-{#        document.getElementById("js-pl-input-fake1").style.display="block"#}
-{#        document.getElementById("js-pl-submit2").style.display="block"#}
-{#    }#}
-
     //添加评论
     $('#js-pl-submit').on('click', function(){
         var comments = $("#js-pl-textarea").val()

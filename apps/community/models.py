@@ -71,3 +71,17 @@ class HuiFu(models.Model):
         verbose_name_plural = verbose_name
 
 
+class HuiFuHuiFu(models.Model):
+    huifu_huifu = models.ForeignKey(HuiFu, verbose_name=u'所属回复')
+    cengji = models.IntegerField(verbose_name=u"层级")
+    text = models.CharField(max_length=300, verbose_name=u"回复内容")
+    mubiao_user = models.IntegerField(verbose_name=u"回复所属用户")
+    mubiao_user_name = models.CharField(default="", max_length=20, verbose_name=u'被回复用户名字')  # 评论者用户名
+    huifu_user = models.IntegerField(verbose_name=u"回复者")
+    huifu_user_name = models.CharField(default="", max_length=20, verbose_name=u'回复者名字')  # 评论者用户名
+    add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    image = models.CharField(default="", max_length=300, verbose_name=u"图片路径")
+
+    class Meta:
+        verbose_name = u"回复的回复"
+        verbose_name_plural = verbose_name
