@@ -6,7 +6,7 @@ from django.db import models
 from DjangoUeditor.models import UEditorField
 # Create your models here.
 
-#nishishie
+#nishishie  hahahah
 class CityDict(models.Model):
     name = models.CharField(max_length=20, verbose_name=u"城市")
     desc = models.CharField(max_length=200, verbose_name=u"描述")
