@@ -4,6 +4,7 @@ from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.views.generic.base import View
 from .models import Node,Topic,PingLun,HuiFu,HuiFuHuiFu
 from users.models import UserProfile
+from operation.models import UserMessage
 #用来制作分页
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from .forms import UploadImageForm
@@ -64,7 +65,7 @@ class CommunView(View):
     def get(self,request):
         #取出节点
         all_node = Node.objects.all()
-        # 取出话题
+        # 取出所有话题
         all_topic = Topic.objects.all()
         #话题总数
         nums = all_topic.count()
@@ -196,6 +197,11 @@ class TopicAddView(View):
             topic_xiang = Topic.objects.get(id=int(huatiid))
             topic_xiang.number += 1
             topic_xiang.save()
+
+            user_message = UserMessage()
+            user_message.user = topic_pinglun.mubiao_user
+            user_message.message = "有人评论了你"
+            user_message.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
@@ -221,7 +227,7 @@ class HuiFuAddView(View):
         if int(pinglun_id) > 0:
             topic_huifu = HuiFu()
             suoshu_pinglun = PingLun.objects.get(id=int(pinglun_id))
-            print(suoshu_pinglun)
+
             topic_huifu.huifu_pinglun = suoshu_pinglun
             topic_huifu.cengji = 2
             topic_huifu.pinglun_text = comments
@@ -231,6 +237,12 @@ class HuiFuAddView(View):
             topic_huifu.huifu_user_name = request.user
             topic_huifu.image = image
             topic_huifu.save()
+            print(pinglun_user_name)
+            print(pinglun_user)
+            user_message = UserMessage()
+            user_message.user = pinglun_user
+            user_message.message = "有人回复了你的评论"
+            user_message.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
                 return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
@@ -264,6 +276,11 @@ class NewHuiFuAddView(View):
             topic_huifu.huifu_user_name = request.user#回复者名字
             topic_huifu.image = image
             topic_huifu.save()
+
+            user_message = UserMessage()
+            user_message.user = huifu_user
+            user_message.message = "有人回复了你的回复"
+            user_message.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')

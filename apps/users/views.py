@@ -308,7 +308,7 @@ class MymessageView(LoginRequiredMixin, View):
     我的消息
     """
     def get(self, request):
-        all_messages = UserMessage.objects.filter(user=request.user.id)
+        all_messages = UserMessage.objects.filter(user=request.user.id).order_by("-add_time")
 
         #用户进入个人消息后清空未读消息的记录
         all_unread_messages = UserMessage.objects.filter(user=request.user.id, has_read=False)

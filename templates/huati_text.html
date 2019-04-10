@@ -175,7 +175,7 @@
                                     <div class="footer clearfix" id="1">
                                         <span title="创建时间" class="l timeago">{{ foo.add_time }}</span>
                                         <input id="foo3" type="hidden" value="{{ foo.mubiao_user_name }}">
-                                        <input id="foo2" type="hidden" value="{{ foo.mubiao_user }}">
+                                        <input id="foo2" type="hidden" value="{{ foo.pinglun_user }}">
                                         <button style="margin-left: 10px" class="button_click" id="button_id">回复</button>
                                         <input id="foo" type="hidden" value="{{ foo.id }}">
 
@@ -193,7 +193,7 @@
                                         <div class="footer clearfix"style="margin-left: 60px">
                                             <span title="创建时间" class="l timeago">{{ foo2.add_time }}</span>
                                             <input  type="hidden" value="{{ foo2.huifu_user_name }}">
-                                            <input  type="hidden" value="{{ foo2.mubiao_user }}">
+                                            <input  type="hidden" value="{{ foo2.huifu_user }}">
                                             <button style="margin-left: 10px" class="button_click2">回复</button>
                                             <input  type="hidden" value="{{ foo2.id }}">
                                         </div>
@@ -210,7 +210,7 @@
                                             <div class="footer clearfix"style="margin-left: 60px">
                                                 <span title="创建时间" class="l timeago">{{ foo3.add_time }}</span>
                                                 <input  type="hidden" value="{{ foo3.huifu_user_name }}">
-                                                <input  type="hidden" value="{{ foo3.mubiao_user }}">
+                                                <input  type="hidden" value="{{ foo3.huifu_user }}">
                                                 <button style="margin-left: 10px" class="button_click3">回复</button>
                                                 <input  type="hidden" value="{{ foo2.id }}">
                                             </div>
@@ -218,7 +218,6 @@
                                     {% endfor %}
 
                                 {% endfor %}
-
 
                             </li>
                                 {% endfor %}
