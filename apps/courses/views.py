@@ -5,7 +5,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.db.models import Q
 
-from .models import Course, CourseResource
+from .models import Course, CourseResource,Video
 from operation.models import UserFavorite, CourseComments, UserCourse
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -45,6 +45,35 @@ class CourseListView(View):
             "sort":sort,
             "hot_courses":hot_courses
         })
+
+
+class CourseVideoView(LoginRequiredMixin, View):
+    def get(self, request, video_id):
+        video = Video.objects.get(id=video_id)
+        course = video.lesson.course
+        all_resource = CourseResource.objects.filter(course=course)
+
+        # 查询用户是否已经关联了该数据
+        user_course = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_course:
+            # 如果没有则写入数据库
+            my_course = UserCourse(user=request.user, course=course)
+            my_course.save()
+
+        # 该同学还学过
+        user_courses = UserCourse.objects.filter(course=course)  # 获取“用户课程”表里面该课程的所有记录
+        user_ids = [user_course.user.id for user_course in user_courses]  # 获取学过该课程的所有用户id
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)  # 获取这些用户学过的课程记录
+        course_ids = [user_course.id for user_course in all_user_courses]  # 获取这些课程的id
+        relate_courses = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]  # 根据点击量取出5个
+
+        return render(request, 'course-play.html', {
+            'course': course,
+            'all_resource': all_resource,
+            'relate_courses': relate_courses,
+            'video': video,
+        })
+
 
 
 class CourseDetailView(View):

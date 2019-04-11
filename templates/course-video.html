@@ -78,7 +78,8 @@
                             {% for video in lesson.get_lesson_video %}
                             <li>
 {#                            此处视频url跳转到响应界面#}
-                                <a target="_blank" href='{{ video.url }}' class="J-media-item studyvideo">{{ video.name }} ({{ video.learn_times }})
+                                <a target="_blank" href='{% url 'course:course_video' video.id %}' class="J-media-item studyvideo">{{ video.name }} ({{ video.learn_times }})
+{#                                <a target="_blank" href='{{ video.url }}' class="J-media-item studyvideo">{{ video.name }} ({{ video.learn_times }})#}
                                     <i class="study-state"></i>
                                 </a>
                             </li>

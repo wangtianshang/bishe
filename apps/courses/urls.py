@@ -3,7 +3,7 @@ __author__ = 'bobby'
 
 from django.conf.urls import url, include
 
-from .views import CourseListView, CourseDetailView, CourseInfoView, CommentsView, AddComentsView
+from .views import CourseListView, CourseDetailView, CourseInfoView, CommentsView, AddComentsView,CourseVideoView
 
 urlpatterns = [
     #课程列表页
@@ -16,6 +16,9 @@ urlpatterns = [
 
     #课程评论
     url(r'^comment/(?P<course_id>\d+)/$', CommentsView.as_view(), name="course_comments"),
+
+    #课程视频
+    url(r'video/(?P<video_id>\d+)/$', CourseVideoView.as_view(), name='course_video'),
 
     #添加课程评论
     url(r'^add_comment/$', AddComentsView.as_view(), name="add_comment"),
