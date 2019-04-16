@@ -5,6 +5,7 @@ from django.views.generic.base import View
 from .models import Node,Topic,PingLun,HuiFu,HuiFuHuiFu
 from users.models import UserProfile
 from operation.models import UserMessage
+from django.db.models import Q
 #用来制作分页
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from .forms import UploadImageForm
@@ -71,6 +72,12 @@ class CommunView(View):
         nums = all_topic.count()
         #属于某个用户的话题话题
         my_topic = Topic.objects.filter(topic_uid=request.session.get('uid', 0))
+
+        # 社区话题搜索
+        search_keywords = request.GET.get('keywords', "")
+        if search_keywords:
+            all_topic = all_topic.filter(Q(name__icontains=search_keywords) |
+                                               Q(content__icontains=search_keywords))
 
         #推荐话题随机选择三个
         hot_topic = random.sample(list(all_topic),3)
@@ -206,7 +213,7 @@ class TopicAddView(View):
         else:
             return HttpResponse('{"status":"fail", "msg":"添加失败"}', content_type='application/json')
 
-
+#增加回复
 class HuiFuAddView(View):
     def post(self,request):
         image = ""

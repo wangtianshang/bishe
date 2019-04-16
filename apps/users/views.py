@@ -71,7 +71,7 @@ class RegisterView(View):
             user_message.message = "欢迎注册慕学在线网"
             user_message.save()
 
-            # send_register_email(user_name, "register")##此处是为了进行邮箱验证码验证
+            send_register_email(user_name, "register")##此处是为了进行邮箱验证码验证
             return render(request, "login.html")
         else:
             return render(request, "register.html", {"register_form":register_form})

@@ -76,6 +76,7 @@ function search_click(){
         request_url = "/topic/list?keywords="+keywords
     }
     window.location.href = request_url
+
 }
 
 //刷新验证码
