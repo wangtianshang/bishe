@@ -257,7 +257,7 @@ class TeacherListView(View):
         except PageNotAnInteger:
             page = 1
 
-        p = Paginator(all_teachers, 1, request=request)
+        p = Paginator(all_teachers, 2, request=request)
 
         teachers = p.page(page)
         return render(request, "teachers-list.html", {
@@ -285,7 +285,8 @@ class TeacherDetailView(View):
                 has_org_faved = True
 
         #讲师排行
-        sorted_teacher = Teacher.objects.all().order_by("-click_nums")[:3]
+        # sorted_teacher = Teacher.objects.all().order_by("-click_nums")[:3]
+        sorted_teacher = Teacher.objects.all().order_by("-work_years")[:3]
         return render(request, "teacher-detail.html", {
             "teacher":teacher,
             "all_courses":all_courses,

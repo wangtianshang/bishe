@@ -1,0 +1,86 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{% static 'boot/js/jquery-2.0.2.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static  'boot/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}" />
+    <script src="{% static 'boot/js/bootstrap.js' %}"></script>
+</head>
+<body>
+<a href="" class="btn btn-info">添加章节</a>
+<div class="container">
+	<div style="width: 900px;float:left;" class="row">
+		<div class="span8">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							所属课程
+						</th>
+						<th>
+							章节名
+						</th>
+						<th>
+							时长
+						</th>
+						<th>
+							添加时间
+						</th>
+                        <th>
+
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for foo in lessonlist %}
+					    <tr class="info">
+						<td>
+                            {{ cname }}
+						</td>
+						<td>
+							<a style="text-decoration: none">{{ foo.name }}</a>
+						</td>
+						<td>
+							{{ foo.learn_times }}
+						</td>
+						<td>
+							{{ foo.add_time }}
+						</td>
+                        <td>
+							<a href="" class="btn btn-info btn-primary btn-xs">删除</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <div style="float:right;">
+        <div class="box mb40">
+                        <h4 class="yangshi">附件资料</h4>
+                        <ul class="downlist">
+                            {% for foo in sourcelist %}
+                                <li>
+                                    <span ><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;{{ foo.name }}</span>
+                                    <a href="{{ MEDIA_URL }}{{ foo.download }}" class="downcode" target="_blank" download="" data-id="274" title="">下载</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+    </div>
+</div>
+<style>
+    .yangshi {
+        width: 200px;
+        padding-bottom: 18px;
+        font-weight: bold;
+        font-size: 16px;
+        margin-top: 20px;
+        border-bottom: 1px solid #d0d6d9;
+    }
+</style>
+</body>
+</html>

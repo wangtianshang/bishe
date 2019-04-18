@@ -21,7 +21,7 @@ from django.views.generic import TemplateView#这样可以不用写view函数直
 import xadmin
 from django.views.static import serve#处理静态位置文件
 
-from users.views import LogoutView, LoginView, RegisterView, AciveUserView, ForgetPwdView, ResetView, ModifyPwdView
+from users.views import LogoutView, LoginView, RegisterView, AddCourseView,AciveUserView, TeacherListView,ForgetPwdView, ResetView, ModifyPwdView,TeacherLoginView,TeacherLogOutView,ZhangJieView
 from users.views import IndexView
 from community.views import CommunView
 from organization.views import OrgView
@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url('^$', IndexView.as_view(), name="index"),
     url('^login/$', LoginView.as_view(), name="login"),
+
     url('^logout/$', LogoutView.as_view(), name="logout"),
     url('^register/$', RegisterView.as_view(), name="register"),
     url(r'^captcha/', include('captcha.urls')),
@@ -40,6 +41,13 @@ urlpatterns = [
     url(r'^forget/$', ForgetPwdView.as_view(), name="forget_pwd"),
     url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name="reset_pwd"),
     url(r'^modify_pwd/$', ModifyPwdView.as_view(), name="modify_pwd"),
+
+    #教师操作模块
+    url('^teacherlogin/$', TeacherLoginView.as_view(), name="teacher_login"),
+    url('^teacherlist/$', TeacherListView.as_view(), name="teacher_list"),
+    url('^add_teacher_course/$', AddCourseView.as_view(), name="add_teacher_course"),
+    url('^teacherlogout/$', TeacherLogOutView.as_view(), name="teacher_logout"),
+    url('^teacherzhangjie/(?P<cid>.*)/$', ZhangJieView.as_view(), name="zhangjie"),
 
     #话题配置
     url(r'^topic/', include('community.urls', namespace="topic")),

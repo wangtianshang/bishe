@@ -1,7 +1,7 @@
 # _*_ encoding:utf-8 _*_
 import  json
 
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout#认证登录注册
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
@@ -18,7 +18,7 @@ from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
-from courses.models import Course
+from courses.models import Course,Lesson,CourseResource
 from .models import Banner
 
 #用邮箱登录
@@ -84,6 +84,81 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse("index"))
+#教师登录
+class TeacherLoginView(View):
+    def get(self,request):
+        return render(request,'teacher_login.html')
+    def post(self,request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        teacher = Teacher.objects.filter(teacher_name=username).first()
+
+        if teacher:
+            request.session['tid'] = teacher.id
+            request.session['tname'] = username
+            if teacher.password == password:
+                course_list = Course.objects.filter(teacher_id = teacher.id)
+                # print(course_list)
+                return render(request, 'teacher_dao/list.html', {
+                    'course_list':course_list,
+                })
+            else:
+                return render(request, 'teacher_login.html', {
+                    'password_error': "密码错误",
+                })
+        else:
+            return render(request, 'teacher_login.html', {
+                'user_error': "用户名错误",
+            })
+
+#教师注销
+class TeacherLogOutView(View):
+    def get(self,request):
+        teacherid = request.session.get('tid', 0)
+
+        tname = request.session.get('tname', "")
+
+        if teacherid:
+            del request.session['tid']
+        if tname:
+            del request.session['tname']
+        return redirect(reverse('teacher_list'))
+#教师登录列表主页
+class TeacherListView(View):
+    def get(self,request):
+        teacherid = request.session.get('tid', 0)
+
+        teacher = Teacher.objects.filter(id=int(teacherid)).first()
+
+        if teacher:
+            course_list = Course.objects.filter(teacher_id=teacher.id)
+            return render(request, 'teacher_dao/list.html', {
+                'course_list': course_list,
+            })
+        else:
+            return render(request, 'teacher_dao/list.html')
+
+
+class ZhangJieView(View):
+    def get(self,request,cid):
+        #章节列表
+        lessonlist = Lesson.objects.filter(course_id=int(cid))
+        #课程资源
+        sourcelist = CourseResource.objects.filter(course_id = int(cid))
+        cour = Course.objects.filter(id=int(cid)).first()
+        cname = cour.name
+        return render(request,'teacher_dao/zhangjie.html',{
+            'lessonlist':lessonlist,
+            'sourcelist':sourcelist,
+            'cname':cname
+        })
+
+class AddCourseView(View):
+    def get(self,request):
+        return render(request,'teacher_dao/add_teacher_course.html')
+    def post(self,request):
+        return HttpResponse('ok')
+
 
 class LoginView(View):
     def get(self, request):
@@ -111,7 +186,7 @@ class LoginView(View):
         else:
             return render(request, "login.html", {"login_form":login_form})
 
-
+#忘记密码
 class ForgetPwdView(View):
     def get(self, request):
         forget_form = ForgetForm()
@@ -126,7 +201,7 @@ class ForgetPwdView(View):
         else:
             return render(request, "forgetpwd.html", {"forget_form":forget_form})
 
-
+#密码重置
 class ResetView(View):
     def get(self, request, active_code):
         all_records = EmailVerifyRecord.objects.filter(code=active_code)

@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{% static 'boot/js/jquery-2.0.2.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static  'boot/css/bootstrap.css' %}">
+    <script src="{% static 'boot/js/bootstrap.js' %}"></script>
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+
+		<div class="span12" style="margin-left: 50px">
+        {% if request.session.tid %}
+        <font>欢迎教师&nbsp;&nbsp;{{ request.session.tname }}&nbsp;&nbsp;&nbsp;&nbsp;</font>
+            <a href="{% url 'teacher_logout' %}" class="btn btn-success">注销</a>
+            {% else %}
+            <a href="{% url 'teacher_login' %}" class="btn btn-success">请登录</a>
+        {% endif %}
+
+
+			<ul class="thumbnails">
+                {% for cou in course_list %}
+                    <li class="span4" style="width: 500px;float: left">
+                        <div class="thumbnail">
+                            <a href="{% url 'zhangjie' cou.id %}"><img class="cen" alt="300x200" style="width: 300px;height: 200px;cursor: pointer" src="{{ MEDIA_URL }}{{cou.image}}" /></a>
+                            <div class="caption">
+                                <h3>
+                                    <a href="{% url 'zhangjie' cou.id %}" style="text-decoration: none">{{ cou.name }}</a>
+                                </h3>
+                                <p>
+                                    {{ cou.desc }}
+                                </p>
+                                <p>
+                                    <a class="btn btn-primary" href="#">删除</a> <a class="btn btn-primary" href="{% url 'add_teacher_course' %}">添加</a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+<style>
+    .thumbnails li{
+        list-style-type: none;
+    }
+    .cen{
+        margin: 0 auto;
+    }
+</style>
+</body>
+
+</html>

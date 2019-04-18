@@ -8,7 +8,7 @@ from django.db.models import Q
 from .models import Course, CourseResource,Video
 from operation.models import UserFavorite, CourseComments, UserCourse
 from utils.mixin_utils import LoginRequiredMixin
-
+from organization.models import Teacher
 # Create your views here.
 
 class CourseListView(View):
@@ -82,6 +82,7 @@ class CourseDetailView(View):
     """
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+        teacher = Teacher.objects.get(id = course.teacher_id)
 
         #增加课程点击数
         course.click_nums += 1
@@ -108,7 +109,8 @@ class CourseDetailView(View):
             "course":course,
             "relate_coures":relate_coures,
             "has_fav_course":has_fav_course,
-            "has_fav_org":has_fav_org
+            "has_fav_org":has_fav_org,
+            "teacher":teacher
         })
 
 class CourseInfoView(LoginRequiredMixin, View):
