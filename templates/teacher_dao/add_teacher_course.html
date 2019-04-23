@@ -98,39 +98,39 @@
 	</style>
 </head>
 <body>
-<form action="/form/" method="post" class="smart-green">
-    <h1>留言信息
-        <span>请留下你的信息.</span>
+<form action="{%  url 'add_teacher_course' %}" method="post" enctype="multipart/form-data" class="smart-green">
+    <h1>课程添加
+        <span>请填写课程信息.</span>
     </h1>
     <label>
-        <span>姓名 :</span>
-        <input id="name" type="text" name="name" class="error" placeholder="请输入您的姓名"/>
+        <span>课程名 :</span>
+        <input id="name" type="text" name="name" class="error" placeholder="请输入课程名"/>
         <div class="error-msg"></div>
     </label>
 
     <label>
-        <span>邮箱 :</span>
-        <input id="email" type="email" value="" name="email" placeholder="请输入邮箱地址"/>
+        <span>课程简介 :</span>
+        <input id="email" type="text" value="" name="jianjie" placeholder="请输入课程描述"/>
+        <div class="error-msg"></div>
+    </label>
+    <label>
+        <span>封面 :</span>
+            <input type="file" id="test-image-file" name="image" accept="image/gif, image/jpeg, image/png, image/jpg">
+        <div class="error-msg"></div>
+    </label>
+    <label>
+        <span>课程详情 :</span>
+        <textarea style="resize: none;" id="message" name="message"  placeholder="请输入课程详情"></textarea>
         <div class="error-msg"></div>
     </label>
 
-    <label>
-        <span>联系地址 :</span>
-        <input id="address" type="text" value="" name="address" placeholder="请输入联系地址"/>
-        <div class="error-msg"></div>
-    </label>
-
-    <label>
-        <span>留言 :</span>
-        <textarea id="message" name="message"  placeholder="请输入你的建议"></textarea>
-        <div class="error-msg"></div>
-    </label>
     <div class="success-msg"></div>
     <label>
-        <span>&nbsp;</span>
-        <input type="submit" class="button" value="提交"/>
+        <input style="padding: 0 25px 10px 25px;" type="submit" class="button" value="提交"/>
     </label>
+
     <input type='hidden' name='csrfmiddlewaretoken' value='SfHkbL4feo1G00sJQtbO7TtLN4c2BUwa' />
+    {% csrf_token %}
 </form>
 
 </body>

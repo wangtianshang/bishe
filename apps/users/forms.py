@@ -6,6 +6,7 @@ from django import forms
 from captcha.fields import CaptchaField
 
 from .models import UserProfile
+from courses.models import Course
 
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)
@@ -31,6 +32,12 @@ class ModifyPwdForm(forms.Form):
 class UploadImageForm(forms.ModelForm):
     class Meta:
         model = UserProfile
+        fields = ['image']
+
+#添加课程图片
+class AddImageForm(forms.ModelForm):
+    class Meta:
+        model = Course
         fields = ['image']
 
 

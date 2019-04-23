@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>章节列表</title>
     <script src="{% static 'boot/js/jquery-2.0.2.min.js' %}"></script>
     <link rel="stylesheet" href="{% static  'boot/css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}" />
@@ -11,6 +11,7 @@
 </head>
 <body>
 <a href="" class="btn btn-info">添加章节</a>
+<a href="{% url 'teacher_list' %}" class="btn btn-info">回到主页</a>
 <div class="container">
 	<div style="width: 900px;float:left;" class="row">
 		<div class="span8">
@@ -41,7 +42,7 @@
                             {{ cname }}
 						</td>
 						<td>
-							<a style="text-decoration: none">{{ foo.name }}</a>
+							<a href="{% url 'sourcelist' foo.id%}" style="text-decoration: none">{{ foo.name }}</a>
 						</td>
 						<td>
 							{{ foo.learn_times }}
@@ -60,12 +61,13 @@
 	</div>
     <div style="float:right;">
         <div class="box mb40">
-                        <h4 class="yangshi">附件资料</h4>
+                         <h4 class="yangshi">附件资料</h4><a style="position: absolute;top: 50px;right: 190px" href="" class="btn btn-info btn-primary btn-xs">添加资源</a>
+
                         <ul class="downlist">
                             {% for foo in sourcelist %}
                                 <li>
                                     <span ><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;{{ foo.name }}</span>
-                                    <a href="{{ MEDIA_URL }}{{ foo.download }}" class="downcode" target="_blank" download="" data-id="274" title="">下载</a>
+                                    <a style="float: right;" href="" class="btn btn-info btn-primary btn-xs">删除</a>
                                 </li>
                             {% endfor %}
                         </ul>

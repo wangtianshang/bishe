@@ -21,7 +21,7 @@ from django.views.generic import TemplateView#这样可以不用写view函数直
 import xadmin
 from django.views.static import serve#处理静态位置文件
 
-from users.views import LogoutView, LoginView, RegisterView, AddCourseView,AciveUserView, TeacherListView,ForgetPwdView, ResetView, ModifyPwdView,TeacherLoginView,TeacherLogOutView,ZhangJieView
+from users.views import LogoutView, LoginView, RegisterView, AddCourseView,AciveUserView, TeacherListView,ForgetPwdView, ResetView, ModifyPwdView,TeacherLoginView,TeacherLogOutView,ZhangJieView,SourceListView
 from users.views import IndexView
 from community.views import CommunView
 from organization.views import OrgView
@@ -48,6 +48,8 @@ urlpatterns = [
     url('^add_teacher_course/$', AddCourseView.as_view(), name="add_teacher_course"),
     url('^teacherlogout/$', TeacherLogOutView.as_view(), name="teacher_logout"),
     url('^teacherzhangjie/(?P<cid>.*)/$', ZhangJieView.as_view(), name="zhangjie"),
+    url('^sourcelist/(?P<lid>.*)/$', SourceListView.as_view(), name="sourcelist"),
+
 
     #话题配置
     url(r'^topic/', include('community.urls', namespace="topic")),

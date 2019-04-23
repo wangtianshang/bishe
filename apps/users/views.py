@@ -13,12 +13,12 @@ from django.core.urlresolvers import reverse
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm
-from .forms import UserInfoForm
+from .forms import UserInfoForm,AddImageForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
-from courses.models import Course,Lesson,CourseResource
+from courses.models import Course,Lesson,CourseResource,Video
 from .models import Banner
 
 #用邮箱登录
@@ -138,7 +138,7 @@ class TeacherListView(View):
         else:
             return render(request, 'teacher_dao/list.html')
 
-
+#教师操作章节列表
 class ZhangJieView(View):
     def get(self,request,cid):
         #章节列表
@@ -153,13 +153,47 @@ class ZhangJieView(View):
             'cname':cname
         })
 
+#添加教师课程
 class AddCourseView(View):
     def get(self,request):
         return render(request,'teacher_dao/add_teacher_course.html')
     def post(self,request):
-        return HttpResponse('ok')
+        image_form = AddImageForm(request.POST, request.FILES)
+        if image_form.is_valid():
+            image = image_form.cleaned_data['image']
+            name = request.POST.get("name", "")
+            jianjie = request.POST.get("jianjie", "")
+            message = request.POST.get("message", "")
 
+            tid = request.session.get('tid')
+            teacher = Teacher.objects.filter(id = tid).first()
+            # print(type(teacher))
+            # print(type(teacher.org))
+            course = Course()
+            course.course_org = teacher.org
+            course.name = name
+            course.desc = jianjie
+            course.detail = message
+            course.teacher = teacher
+            course.degree = 'cj'
+            course.image = image
+            course.save()
+            return HttpResponseRedirect('/teacherlist/')
 
+#章节中的视频资源
+class SourceListView(View):
+    def get(self,request,lid):
+        # print(sid)
+        sourcelist = Video.objects.filter(lesson_id = int(lid))
+        less = Lesson.objects.filter(id=int(lid)).first()
+        print(less)
+        zname = less.name
+        return render(request,'teacher_dao/videolist.html',{
+            'sourcelist':sourcelist,
+            "zname":zname,
+        })
+
+#登录
 class LoginView(View):
     def get(self, request):
         return render(request, "login.html", {})

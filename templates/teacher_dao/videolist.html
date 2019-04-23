@@ -1,0 +1,61 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="{% static 'boot/js/jquery-2.0.2.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static  'boot/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/aui.css' %}" />
+    <script src="{% static 'boot/js/bootstrap.js' %}"></script>
+    <title>视频列表</title>
+</head>
+<body>
+<a href="" class="btn btn-info">添加视频</a>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                所属章节
+                            </th>
+                            <th>
+                                视频名
+                            </th>
+                            <th>
+                                视频地址
+                            </th>
+                            <th>
+                                添加时间
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for foo in sourcelist %}
+                         <tr class="success">
+                            <td>
+                                {{ zname }}
+                            </td>
+                            <td>
+                                {{ foo.name }}
+                            </td>
+                            <td>
+                                {{ foo.url }}
+                            </td>
+                            <td>
+                                {{ foo.add_time }}
+                                <a style="float:right;" href="" class="btn btn-info btn-primary btn-xs">删除</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
