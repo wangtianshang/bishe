@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>教师课程展示</title>
     <script src="{% static 'boot/js/jquery-2.0.2.min.js' %}"></script>
     <link rel="stylesheet" href="{% static  'boot/css/bootstrap.css' %}">
     <script src="{% static 'boot/js/bootstrap.js' %}"></script>
@@ -21,10 +21,9 @@
             <a href="{% url 'teacher_login' %}" class="btn btn-success">请登录</a>
         {% endif %}
 
-
 			<ul class="thumbnails">
                 {% for cou in course_list %}
-                    <li class="span4" style="width: 500px;float: left">
+                    <li id="li{{ cou.id }}" class="span4" style="width: 500px;float: left">
                         <div class="thumbnail">
                             <a href="{% url 'zhangjie' cou.id %}"><img class="cen" alt="300x200" style="width: 300px;height: 200px;cursor: pointer" src="{{ MEDIA_URL }}{{cou.image}}" /></a>
                             <div class="caption">
@@ -35,7 +34,7 @@
                                     {{ cou.desc }}
                                 </p>
                                 <p>
-                                    <a class="btn btn-primary" href="#">删除</a> <a class="btn btn-primary" href="{% url 'add_teacher_course' %}">添加</a>
+                                    <a class="btn btn-primary" href="javascript:;" onclick="del({{ cou.id }})">删除</a> <a class="btn btn-primary" href="{% url 'add_teacher_course' %}">添加</a>
                                 </p>
                             </div>
                         </div>
@@ -53,6 +52,19 @@
         margin: 0 auto;
     }
 </style>
+<script>
+    function del(id) {
+                $.get("/del_source/"+id,
+                  function(data){
+                     if(data){
+{#                        alert('删除成功')#}
+                        $('#li'+id).remove()
+                     }else{
+                         alert('删除失败')
+                     }
+                  });
+            }
+</script>
 </body>
 
 </html>

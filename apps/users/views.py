@@ -137,6 +137,12 @@ class TeacherListView(View):
             })
         else:
             return render(request, 'teacher_dao/list.html')
+#删除教师课程
+class DeleteSourceView(View):
+    def get(self,request,cid):
+        con = Course.objects.filter(id=int(cid)).delete()
+        # print(con)
+        return HttpResponse(con[0])
 
 #教师操作章节列表
 class ZhangJieView(View):
