@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 
 from .models import UserProfile, EmailVerifyRecord
 from .forms import LoginForm, RegisterForm, ForgetForm, ModifyPwdForm, UploadImageForm
-from .forms import UserInfoForm,AddImageForm
+from .forms import UserInfoForm,AddImageForm,AddFileForm
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 from operation.models import UserCourse, UserFavorite, UserMessage
@@ -68,7 +68,7 @@ class RegisterView(View):
             #这是给我的信息的提示
             user_message = UserMessage()
             user_message.user = user_profile.id
-            user_message.message = "欢迎注册慕学在线网"
+            user_message.message = "欢迎注册在线学习网"
             user_message.save()
 
             send_register_email(user_name, "register")##此处是为了进行邮箱验证码验证
@@ -141,9 +141,8 @@ class TeacherListView(View):
 class DeleteSourceView(View):
     def get(self,request,cid):
         con = Course.objects.filter(id=int(cid)).delete()
-        # print(con)
-        return HttpResponse(con[0])
 
+        return HttpResponse(con[0])
 #教师操作章节列表
 class ZhangJieView(View):
     def get(self,request,cid):
@@ -156,8 +155,62 @@ class ZhangJieView(View):
         return render(request,'teacher_dao/zhangjie.html',{
             'lessonlist':lessonlist,
             'sourcelist':sourcelist,
-            'cname':cname
+            'cname':cname,
+            'cid':cid
         })
+
+#添加章节
+class Add_ZhangjieView(View):
+    def get(self,request,cid):
+        return render(request,'teacher_dao/add_zhangjie.html',{
+            'cid':cid
+        })
+class Add_ZhangjieView2(View):
+    def post(self,request):
+        name = request.POST.get("name", "")
+        shichang = request.POST.get("shichang", "")
+        cid = request.POST.get("cid", "")
+        course = Course.objects.filter(id = int(cid)).first()
+        less = Lesson()
+        less.course = course
+        less.name = name
+        less.learn_times = shichang
+        less.save()
+        return HttpResponseRedirect('/teacherzhangjie/%s'%(cid))
+#删除章节
+class DeleteZhangjieView(View):
+    def get(self,request,lid):
+        con = Lesson.objects.filter(id=int(lid)).delete()
+        return HttpResponse(con[0])
+
+#添加资源 AddFileForm
+class Add_ZiyuanView(View):
+    def get(self,request,cid):
+        return render(request,'teacher_dao/add_source.html',{
+            'cid':cid,
+        })
+class Add_ZiyuanView2(View):
+    def post(self,request):
+        file_form = AddFileForm(request.POST, request.FILES)
+        # print(type(file_form))
+        if file_form.is_valid():
+            print('ok')
+            download = file_form.cleaned_data['download']
+            name = request.POST.get("name", "")
+            cid = request.POST.get("cid", "")
+            cour = Course.objects.filter(id=int(cid)).first()
+            coursesource = CourseResource()
+            coursesource.course = cour
+            coursesource.name = name
+            coursesource.download = download
+            coursesource.save()
+            return HttpResponseRedirect('/teacherzhangjie/%s'%(cid))
+
+#删除资源
+class DeleteZiyuanView(View):
+    def get(self,request,sid):
+        con = CourseResource.objects.filter(id=int(sid)).delete()
+        return HttpResponse(con[0])
 
 #添加教师课程
 class AddCourseView(View):
@@ -166,6 +219,7 @@ class AddCourseView(View):
     def post(self,request):
         image_form = AddImageForm(request.POST, request.FILES)
         if image_form.is_valid():
+
             image = image_form.cleaned_data['image']
             name = request.POST.get("name", "")
             jianjie = request.POST.get("jianjie", "")
@@ -197,7 +251,36 @@ class SourceListView(View):
         return render(request,'teacher_dao/videolist.html',{
             'sourcelist':sourcelist,
             "zname":zname,
+            'lid':lid,
         })
+
+#添加视频资源
+class AddVideoView(View):
+    def get(self,request,lid):
+        return render(request,'teacher_dao/add_video.html',{
+            'lid':lid
+        })
+class AddVideoView2(View):
+    def post(self,request):
+        name = request.POST.get("name", "")
+        shichang = request.POST.get("shichang", "")
+        url = request.POST.get("url", "")
+        lid = request.POST.get("lid", "")
+        less = Lesson.objects.filter(id=int(lid)).first()
+        print(less)
+        video = Video()
+        video.lesson = less
+        video.name = name
+        video.learn_times = shichang
+        video.url = url
+        video.save()
+        return HttpResponseRedirect('/sourcelist/%s'%(lid))
+
+#删除视频
+class DeleteVideoView(View):
+    def get(self,request,vid):
+        con = Video.objects.filter(id=int(vid)).delete()
+        return HttpResponse(con[0])
 
 #登录
 class LoginView(View):
@@ -289,8 +372,6 @@ class UserinfoView(LoginRequiredMixin, View):
             return HttpResponse('{"status":"success"}', content_type='application/json')
         else:
             return HttpResponse(json.dumps(user_info_form.errors), content_type='application/json')
-
-
 
 
 class UploadImageView(LoginRequiredMixin, View):

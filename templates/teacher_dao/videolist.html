@@ -10,7 +10,7 @@
     <title>视频列表</title>
 </head>
 <body>
-<a href="" class="btn btn-info">添加视频</a>
+<a href="{% url 'add_video' lid %}" class="btn btn-info">添加视频</a>
     <div class="container">
         <div class="row">
             <div class="span12">
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                     {% for foo in sourcelist %}
-                         <tr class="success">
+                         <tr id="tr{{ foo.id }}" class="success">
                             <td>
                                 {{ zname }}
                             </td>
@@ -45,17 +45,27 @@
                             </td>
                             <td>
                                 {{ foo.add_time }}
-                                <a style="float:right;" href="" class="btn btn-info btn-primary btn-xs">删除</a>
+                                <a style="float:right;" href="javascript:;" onclick="del({{ foo.id }})" class="btn btn-info btn-primary btn-xs">删除</a>
                             </td>
                         </tr>
                     {% endfor %}
-
-
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+<script>
+    function del(id) {
+                $.get("/del_video/"+id,
+                  function(data){
+                     if(data){
+{#                        alert('删除成功')#}
+                        $('#tr'+id).remove()
+                     }else{
+                         alert('删除失败')
+                     }
+                  });
+            }
+</script>
 </body>
 </html>

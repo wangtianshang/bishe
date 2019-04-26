@@ -21,7 +21,7 @@ from django.views.generic import TemplateView#这样可以不用写view函数直
 import xadmin
 from django.views.static import serve#处理静态位置文件
 
-from users.views import LogoutView, LoginView, RegisterView, AddCourseView,AciveUserView, TeacherListView,ForgetPwdView, ResetView, ModifyPwdView,TeacherLoginView,TeacherLogOutView,ZhangJieView,SourceListView,DeleteSourceView
+from users.views import LogoutView, LoginView, RegisterView, AddCourseView,AciveUserView, TeacherListView,ForgetPwdView, ResetView, ModifyPwdView,TeacherLoginView,TeacherLogOutView,ZhangJieView,SourceListView,DeleteSourceView,Add_ZhangjieView,Add_ZiyuanView,AddVideoView,Add_ZhangjieView2,Add_ZiyuanView2,AddVideoView2,DeleteZhangjieView,DeleteZiyuanView,DeleteVideoView
 from users.views import IndexView
 from community.views import CommunView
 from organization.views import OrgView
@@ -44,14 +44,26 @@ urlpatterns = [
 
     #教师操作模块
     url('^teacherlogin/$', TeacherLoginView.as_view(), name="teacher_login"),
+    url('^teacherlogout/$', TeacherLogOutView.as_view(), name="teacher_logout"),
     url('^teacherlist/$', TeacherListView.as_view(), name="teacher_list"),
     url('^add_teacher_course/$', AddCourseView.as_view(), name="add_teacher_course"),
+    #删除课程
     url('^del_source/(?P<cid>.*)/$', DeleteSourceView.as_view(), name="delsource"),
 
-    url('^teacherlogout/$', TeacherLogOutView.as_view(), name="teacher_logout"),
+    #章节操作
+    url('^add_zhangjie/(?P<cid>.*)/$', Add_ZhangjieView.as_view(), name="add_zhangjie"),
+    url('^add_zhangjie2/$', Add_ZhangjieView2.as_view(), name="add_zhangjie2"),
+    url('^del_zhangjie/(?P<lid>.*)/$', DeleteZhangjieView.as_view(), name="delzhangjie"),
+    url('^add_ziyuan/(?P<cid>.*)/$', Add_ZiyuanView.as_view(), name="add_ziyuan"),
+    url('^add_ziyuan2/$', Add_ZiyuanView2.as_view(), name="add_ziyuan2"),
+    url('^del_ziyuan/(?P<sid>.*)/$', DeleteZiyuanView.as_view(), name="delziyuan"),
     url('^teacherzhangjie/(?P<cid>.*)/$', ZhangJieView.as_view(), name="zhangjie"),
     url('^sourcelist/(?P<lid>.*)/$', SourceListView.as_view(), name="sourcelist"),
 
+    #添加视频
+    url('^add_video/(?P<lid>.*)/$', AddVideoView.as_view(), name="add_video"),
+    url('^add_video2/$', AddVideoView2.as_view(), name="add_video2"),
+    url('^del_video/(?P<vid>.*)/$', DeleteVideoView.as_view(), name="delvideo"),
 
     #话题配置
     url(r'^topic/', include('community.urls', namespace="topic")),
