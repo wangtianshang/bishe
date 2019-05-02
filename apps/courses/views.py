@@ -165,8 +165,8 @@ class AddComentsView(View):
 
         course_id = request.POST.get("course_id", 0)
         comments = request.POST.get("comments", "")
-        print(type(course_id))##读出来的id是字符串
-        print(comments)#这个是写入的数据
+        # print(type(course_id))##读出来的id是字符串
+        # print(comments)#这个是写入的数据
         if int(course_id) > 0 and comments:
             course_comments = CourseComments()
             course = Course.objects.get(id=int(course_id))
