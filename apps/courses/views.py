@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+import json
+from django.shortcuts import render,redirect
 from django.views.generic.base import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.db.models import Q
 
-from .models import Course, CourseResource,Video
+from .models import Course, CourseResource,Video,CourseXuanzeTest,CoursePanduanTest,CourseTiankongTest,TestSorce
 from operation.models import UserFavorite, CourseComments, UserCourse
 from utils.mixin_utils import LoginRequiredMixin
 from organization.models import Teacher
@@ -141,6 +142,106 @@ class CourseInfoView(LoginRequiredMixin, View):
             "relate_courses":relate_courses
         })
 
+
+#课程测试
+class CourseTestView(View):
+    def get(self,request,cid):
+        course = Course.objects.get(id=int(cid))
+        #选择题
+        xuanzelist = CourseXuanzeTest.objects.filter(course=int(cid))
+        #判断题
+        panduanlist = CoursePanduanTest.objects.filter(course=int(cid))
+        #填空题
+        tiankonglist = CourseTiankongTest.objects.filter(course=int(cid))
+
+        uid = request.session['uid']
+        #分数
+        score = TestSorce.objects.filter(course=int(cid),user=int(uid)).first()
+        if not score:
+            sc = 0
+        else:
+            sc = score.sorce
+        all_resources = CourseResource.objects.filter(course=course)
+        return render(request, "course-test.html", {
+            "course": course,
+            'cid':cid,
+            "course_resources": all_resources,
+            'xuanzelist':xuanzelist,
+            'panduanlist':panduanlist,
+            'tiankonglist':tiankonglist,
+            'score':sc
+        })
+
+class CourseInfoView2(View):
+    def post(self,request):
+        # 用来记录正确的数量
+        sum = 0
+        cid = request.POST.get("cid", "")
+        xuanzelist = CourseXuanzeTest.objects.filter(course=int(cid))
+        # 这是提交的选择题答案
+        lists = request.POST.getlist("myarray")
+        ans = []
+        for i in xuanzelist:
+            ans.append(i.answer)
+
+        for i in range(len(ans)):
+            if lists:
+                if lists[i]:
+                    if ans[i] == lists[i]:
+                        sum+=1
+                else:
+                    continue
+            else:
+                continue
+        #判断题模块
+        panduanlist = CoursePanduanTest.objects.filter(course=int(cid))
+        # 这是提交的判断题答案
+        lists2 = request.POST.getlist("myarray2")
+        ans2 = []
+        for i in panduanlist:
+            ans2.append(i.answer)
+        for i in range(len(ans2)):
+            if lists2:
+                if lists2[i]:
+                    if ans2[i] == lists2[i]:
+                        sum+=1
+                else:
+                    continue
+            else:
+                continue
+
+        #填空题模块
+        tiankonglist = CourseTiankongTest.objects.filter(course=int(cid))
+
+        # 这是提交的填空题答案
+        lists3 = request.POST.getlist("myarray3")
+        print(lists3)
+        ans3 = []
+        for i in tiankonglist:
+            ans3.append(i.answer)
+        print(ans3)
+        # for i in range(len(ans3)):
+        #     if lists3:
+        #         if lists3[i]:
+        #             if ans3[i] == lists3[i]:
+        #                 sum += 1
+        #         else:
+        #             continue
+        #     else:
+        #         continue
+        sum = sum*10
+
+        #修改分数
+        tsco = TestSorce.objects.filter(course=int(cid),user=int(request.session['uid'])).first()
+        tsco.sorce = sum
+        tsco.save()
+
+        data = {}
+        data['msg'] = sum
+        data['status'] = 'success'
+        return HttpResponse(json.dumps(data))
+
+
 class CommentsView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
@@ -150,7 +251,6 @@ class CommentsView(LoginRequiredMixin, View):
             "course":course,
             "course_resources":all_resources,
             "all_comments":all_comments
-
         })
 
 

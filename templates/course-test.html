@@ -61,40 +61,49 @@
                     <div class="mod-tab-menu">
                         <ul class="course-menu clearfix">
                             <li><a class="ui-tabs-active " id="learnOn"  href="{% url 'course:course_info' course.id %}"><span>章节</span></a></li>
-                            <li><a id="commentOn" class="active" href="{% url 'course:course_comments' course.id %}"><span>评论</span></a></li>
-                            <li><a id="commentOn" class="" href="{% url 'course:course_test' course.id %}"><span>测试</span></a></li>
-
+                            <li><a id="commentOn" class="" href="{% url 'course:course_comments' course.id %}"><span>评论</span></a></li>
+                            <li><a id="commentOn" class="active" href="{% url 'course:course_test' course.id %}"><span>测试</span></a></li>
                         </ul>
                     </div>
 
-                    <!--发布评论-->
-                    <div id="js-pub-container" class="issques clearfix js-form">
-                        <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">
-                            <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" ></textarea>
-                        </div>
-                        <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
-                        <p class="global-errortip js-global-error"></p>
-                    </div>
+
+{#    <input type="hidden" name="cid" value="{{ cid }}">#}
                     <div id="course_note">
-                        <ul class="mod-post" id="comment-list">
-                            {% for user_comments in all_comments %}
-                            <li class="post-row">
-                                <div class="media">
-                                    <span target="_blank"><img src='{{ MEDIA_URL }}{{ user_comments.user.image }}' width='40' height='40' /></span>
-                                </div>
-                                <div class="bd">
-                                    <div class="tit">
-                                        <span target="_blank">{{ user_comments.user.username }}</span>
-                                    </div>
-                                    <p class="cnt">{{ user_comments.comments }}</p>
-                                    <div class="footer clearfix">
-                                        <span title="创建时间" class="l timeago">时间：{{ user_comments.add_time }}</span>
-                                    </div>
-                                </div>
+                        <h1>一、选择题</h1>
+                        <ul class="mod-post" id="comment-list1">
+                            {% for foo in xuanzelist %}
+                             <li id="testli" class="post-row">
+                                <a>{{ foo.name }}</a><br><br>
+                               <input name = xuanze{{ foo.id }} type="radio" value="A">A:{{ foo.a }}&nbsp;&nbsp;
+                               <input name = xuanze{{ foo.id }} type="radio" value="B">B:{{ foo.bb }}&nbsp;&nbsp;
+                               <input name = xuanze{{ foo.id }} type="radio" value="C">C:{{ foo.c }}&nbsp;&nbsp;
+                               <input name = xuanze{{ foo.id }} type="radio" value="D">D:{{ foo.d }}
                             </li>
                             {% endfor %}
                         </ul>
+                         <h1 style="margin-top: 20px">二、判断题</h1>
+                         <ul class="mod-post" id="comment-list">
+                             {% for foo in panduanlist %}
+                                 <li id="panduanlist" class="post-row">
+                                    <a>{{ foo.name }}</a><br><br>
+                                    <input name = panduan{{ foo.id }} type="radio" value="T">正确:&nbsp;&nbsp;
+                                    <input name = panduan{{ foo.id }} type="radio" value="F">错误:&nbsp;&nbsp;
+                                </li>
+                             {% endfor %}
+
+                        </ul>
+                            <h1 style="margin-top: 20px">三、填空题</h1>
+                         <ul class="mod-post" id="comment-list">
+                             {% for foo in tiankonglist %}
+                                 <li id="tiankonglist" class="post-row">
+                                    <p>{{ foo.name }}</p><br>
+                                    <input style="width: 300px; border: inherit" type="text" name = "tiankong" placeholder="请输入答案,各答案之间用逗号分割" value="">
+                                </li>
+                             {% endfor %}
+                        </ul>
                     </div>
+                <br>
+     <a  href="javascript:;"class="tijiao">提交</a>
 
                 </div>
                 <div class="aside r">
@@ -111,8 +120,8 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="box mb40">
-                        <h4>讲师提示</h4>
+                        <div class="box mb40">
+                        <h4>我的分数</h4><h2 style="position: absolute ;top: 190px;right: 50px">{{ score }}</h2>
                         <div class="teacher-info">
                             <a href="/u/315464/courses?sort=publish" target="_blank">
                                 <img src='{{ MEDIA_URL }}{{ course.teacher.image }}' width='80' height='80' />
@@ -199,36 +208,59 @@
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript">
-    //添加评论
-    $('#js-pl-submit').on('click', function(){
-        var comments = $("#js-pl-textarea").val()
+<style>
+    .tijiao {
+        background-color: #a3aaae;
+        display: block;
+        width: 80px;
+        height: 20px;
+        text-align: center;
+        text-decoration: none;
+    }
 
-        if(comments == ""){
-            alert("评论不能为空")
-            return
+</style>
+<script type="text/javascript">
+    //提交
+    $('.tijiao').on('click', function(){
+{#        选择#}
+        var lists = $("#testli>input[type='radio']:checked");
+        var myArray=new Array()
+        for(var i = 0;i< lists.length;i++){
+            myArray.push(lists[i].value)
         }
+
+{#        判断#}
+        var lists2 = $("#panduanlist>input[type='radio']:checked");
+        var myArray2=new Array()
+        for(var i = 0;i< lists2.length;i++){
+            myArray2.push(lists2[i].value)
+        }
+{#        填空题#}
+                var lists3 = $("#tiankonglist>input[type='text']");
+                var myArray3=new Array()
+                for(var i = 0;i< lists3.length;i++){
+                    console.log(lists3[i].value)
+                    myArray3.push(lists3[i].value)
+                }
+
+        var token = $('input[name=csrfmiddlewaretoken]').val();
         $.ajax({
             cache: false,
             type: "POST",
-            url:"{% url 'course:add_comment' %}",
-            data:{'course_id':{{ course.id }}, 'comments':comments},
+            dataType:'json',
+            url:'{% url "course:course_info2" %}',
+            data:{'cid':{{ cid }},'myarray':myArray,'myarray2':myArray2,'myarray3':myArray3,csrfmiddlewaretoken:'{{ csrf_token }}'},
             async: true,
-            beforeSend:function(xhr, settings){
-                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-            },
-            success: function(data) {
-                if(data.status == 'fail'){
-                    if(data.msg == '用户未登录'){
-                        window.location.href="/login/";
-                    }else{
-                        alert(data.msg)
-                    }
-                }else if(data.status == 'success'){
-                    alert("成功")
+{#            不添加这个后台就接收不到数组#}
+            traditional:true,
+            success:function (data) {
+                if(data.status == 'success'){
+
+                    alert("你的得分是"+data.msg)
+                    console.log(data.msg)
                     window.location.reload();//刷新当前页面.
                 }
-            },
+            }
         });
     });
 

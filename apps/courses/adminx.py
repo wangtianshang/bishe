@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-__author__ = 'bobby'
-__date__ = '2016/10/25 23:34'
+
 import xadmin
 
-from .models import Course, Lesson, Video, CourseResource, BannerCourse
+from .models import Course, Lesson, Video, CourseResource, BannerCourse,CourseXuanzeTest
 from organization.models import CourseOrg
 
 
@@ -84,8 +83,14 @@ class CourseResourceAdmin(object):
     list_filter = ['course', 'name', 'download', 'add_time']
 
 
+class CourseXuanzeTestAdmin(object):
+    list_display = ['name',]
+    search_fields = ['name']
+    list_filter = ['name']
+
 xadmin.site.register(Course, CourseAdmin)
 xadmin.site.register(BannerCourse, BannerCourseAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
+xadmin.site.register(CourseXuanzeTest, CourseXuanzeTestAdmin)

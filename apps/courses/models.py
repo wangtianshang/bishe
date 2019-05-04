@@ -55,6 +55,56 @@ class Course(models.Model):
         return self.name
 
 
+class CourseXuanzeTest(models.Model):
+    course = models.IntegerField( verbose_name=u"所属课程")
+    name = models.CharField(max_length=100, verbose_name=u"题目名")
+    a = models.CharField(max_length=100, verbose_name=u"A")
+    bb = models.CharField(max_length=100, verbose_name=u"B")
+    c = models.CharField(max_length=100, verbose_name=u"C")
+    d = models.CharField(max_length=100, verbose_name=u"D")
+    answer = models.CharField(max_length=100, verbose_name=u"答案")
+
+    class Meta:
+        verbose_name = u"选择题"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
+class CoursePanduanTest(models.Model):
+    course = models.IntegerField( verbose_name=u"所属课程")
+    name = models.CharField(max_length=100, verbose_name=u"题目名")
+    answer = models.CharField(max_length=100, verbose_name=u"答案")
+
+    class Meta:
+        verbose_name = u"判断题"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
+class CourseTiankongTest(models.Model):
+    course = models.IntegerField( verbose_name=u"所属课程")
+    name = models.CharField(max_length=100, verbose_name=u"题目")
+    answer = models.CharField(max_length=100, verbose_name=u"答案")
+
+    class Meta:
+        verbose_name = u"填空题"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
+class TestSorce(models.Model):
+    course = models.IntegerField( verbose_name=u"所属课程")
+    user = models.IntegerField( verbose_name=u"所属用户")
+    sorce = models.CharField(max_length=100, verbose_name=u"分数")
+
+
+
 class BannerCourse(Course):
     class Meta:
         verbose_name = "轮播课程"
