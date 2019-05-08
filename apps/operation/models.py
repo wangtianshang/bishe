@@ -50,6 +50,7 @@ class UserMessage(models.Model):
     message = models.CharField(max_length=500, verbose_name=u"消息内容")
     has_read = models.BooleanField(default=False, verbose_name=u"是否已读")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
+    url = models.CharField(max_length=500, verbose_name=u"话题链接")
 
     class Meta:
         verbose_name = u"用户消息"

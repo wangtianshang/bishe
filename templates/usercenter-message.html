@@ -34,9 +34,9 @@
                     <div class="messages">
                         <div class="fr">
                             <div class="top"><span class="fl time">{{ message.add_time }}</span><span class="fr btn foldbtn"></span></div>
-                            <p>
+                            <a href="{{ message.url }}">
                                 {{ message.message }}
-                            </p>
+                            </a>
                         </div>
                     </div>
                 {% endfor %}

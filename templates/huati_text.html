@@ -229,7 +229,7 @@
             </div>
             <div class="clear"></div>
         </div>
-
+                        <input style="display: none" id="lianjie" value="{{ request.build_absolute_uri }}">
     </div>
 </div>
 
@@ -281,7 +281,7 @@
 <script type="text/javascript">
 {#    回复的回复#}
     $('.button_click2').on('click', function() {
-
+        var lianjie = $("#lianjie").val()
         var trea = document.createElement("textarea")
         trea.setAttribute('placeholder','你好')
         trea.id = 'js-pl-textarea2'
@@ -312,11 +312,12 @@
         foo2 = this.previousElementSibling.value
         foo = this.nextElementSibling.value
         inp.onclick = function () {
-            addhuifu2(foo,foo2,foo3,inp,trea,div1)
+            addhuifu2(foo,foo2,foo3,inp,trea,div1,lianjie)
         }
     });
 
     $('.button_click3').on('click', function() {
+        var lianjie = $("#lianjie").val()
 
         var trea = document.createElement("textarea")
         trea.setAttribute('placeholder','你好')
@@ -348,11 +349,11 @@
         foo2 = this.previousElementSibling.value
         foo = this.nextElementSibling.value
         inp.onclick = function () {
-            addhuifu2(foo,foo2,foo3,inp,trea,div1)
+            addhuifu2(foo,foo2,foo3,inp,trea,div1,lianjie)
         }
     });
 
-    function addhuifu2(foo,foo2,foo3,inp,trea,div1) {
+    function addhuifu2(foo,foo2,foo3,inp,trea,div1,lianjie) {
          inp.style.display="none"
         div1.style.display="none"
 {#        获得输入的回复信息#}
@@ -366,7 +367,7 @@
             cache: false,
             type: "POST",
             url:"/topic/add_newhuifu/",
-            data:{'huifu_id':foo,'huifu_user':foo2,'huifu_user_name':foo3, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
+            data:{'huifu_id':foo,'lianjie':lianjie,'huifu_user':foo2,'huifu_user_name':foo3, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
             async: true,
             success: function(data) {
                 if(data.status == 'fail'){
@@ -385,6 +386,7 @@
 
 {#回复评论#}
     $('.button_click').on('click', function() {
+        var lianjie = $("#lianjie").val()
 
         var trea = document.createElement("textarea")
         trea.setAttribute('placeholder','你好')
@@ -415,11 +417,11 @@
         foo2 = this.previousElementSibling.value
         foo = this.nextElementSibling.value
         inp.onclick = function () {
-            addhuifu(foo,foo2,foo3,inp,trea,div1)
+            addhuifu(foo,foo2,foo3,inp,trea,div1,lianjie)
         }
 
     });
-    function addhuifu(foo,foo2,foo3,inp,trea,div1) {
+    function addhuifu(foo,foo2,foo3,inp,trea,div1,lianjie) {
         inp.style.display="none"
         div1.style.display="none"
 {#        获得输入的回复信息#}
@@ -433,7 +435,7 @@
             cache: false,
             type: "POST",
             url:"/topic/add_huifu/",
-            data:{'pinglun_id':foo,'pinglun_user':foo2,'pinglun_user_name':foo3, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
+            data:{'pinglun_id':foo,'lianjie':lianjie,'pinglun_user':foo2,'pinglun_user_name':foo3, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
             async: true,
             success: function(data) {
                 if(data.status == 'fail'){
@@ -455,6 +457,8 @@
     //添加评论
     $('#js-pl-submit').on('click', function(){
         var comments = $("#js-pl-textarea").val()
+        var lianjie = $("#lianjie").val()
+
         if(comments == ""){
             alert("评论不能为空")
             return
@@ -464,7 +468,7 @@
             cache: false,
             type: "POST",
             url:"/topic/add_comment/",
-            data:{'userid':{{ topic_xiang.topic_uid }},'huatiid':{{ topic_xiang.id }}, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
+            data:{'userid':{{ topic_xiang.topic_uid }},'lianjie':lianjie,'huatiid':{{ topic_xiang.id }}, 'comments':comments,csrfmiddlewaretoken:'{{ csrf_token }}'},
             async: true,
             success: function(data) {
                 if(data.status == 'fail'){

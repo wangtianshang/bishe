@@ -75,8 +75,6 @@ class CourseVideoView(LoginRequiredMixin, View):
             'video': video,
         })
 
-
-
 class CourseDetailView(View):
     """
     课程详情页

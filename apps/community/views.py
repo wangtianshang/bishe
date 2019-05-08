@@ -188,6 +188,8 @@ class TopicAddView(View):
         userid = request.POST.get("userid", 0)#用户id
         huatiid = request.POST.get("huatiid", 0)#话题id
         comments = request.POST.get("comments", "")#评论内容
+        lianjie = request.POST.get("lianjie", "")#话题链接
+
         # print(userid)##读出来的id是字符串
         # print(huatiid)##读出来的id是字符串
         # print(comments)#这个是写入的数据
@@ -208,6 +210,7 @@ class TopicAddView(View):
             user_message = UserMessage()
             user_message.user = topic_pinglun.mubiao_user
             user_message.message = "有人评论了你"
+            user_message.url = lianjie
             user_message.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
@@ -225,7 +228,7 @@ class HuiFuAddView(View):
         pinglun_id = request.POST.get("pinglun_id")
         pinglun_user = request.POST.get("pinglun_user")
         pinglun_user_name = request.POST.get("pinglun_user_name")
-
+        lianjie = request.POST.get("lianjie", "")  # 话题链接
         comments = request.POST.get("comments")
         #判断自己不能评论自己
         if str(request.user) == pinglun_user_name:
@@ -249,6 +252,7 @@ class HuiFuAddView(View):
             user_message = UserMessage()
             user_message.user = pinglun_user
             user_message.message = "有人回复了你的评论"
+            user_message.url = lianjie
             user_message.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
@@ -266,6 +270,7 @@ class NewHuiFuAddView(View):
         huifu_user = request.POST.get("huifu_user")
         huifu_user_name = request.POST.get("huifu_user_name")
         comments = request.POST.get("comments")
+        lianjie = request.POST.get("lianjie", "")  # 话题链接
         # 判断自己不能回复自己
         if str(request.user) == huifu_user_name:
             return HttpResponse('{"status":"fail", "msg":"不能自己回复自己"}', content_type='application/json')
@@ -287,6 +292,7 @@ class NewHuiFuAddView(View):
             user_message = UserMessage()
             user_message.user = huifu_user
             user_message.message = "有人回复了你的回复"
+            user_message.url = lianjie
             user_message.save()
             return HttpResponse('{"status":"success", "msg":"添加成功"}', content_type='application/json')
         else:
