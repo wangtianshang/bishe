@@ -155,6 +155,9 @@ class CourseTestView(View):
         uid = request.session['uid']
         #分数
         score = TestSorce.objects.filter(course=int(cid),user=int(uid)).first()
+        print(uid)
+        print(cid)
+
         if not score:
             sc = 0
         else:
@@ -231,8 +234,15 @@ class CourseInfoView2(View):
 
         #修改分数
         tsco = TestSorce.objects.filter(course=int(cid),user=int(request.session['uid'])).first()
-        tsco.sorce = sum
-        tsco.save()
+        if not tsco:
+            t = TestSorce()
+            t.course = int(cid)
+            t.user = int(request.session['uid'])
+            t.sorce = sum
+            t.save()
+        else:
+            tsco.sorce = sum
+            tsco.save()
 
         data = {}
         data['msg'] = sum

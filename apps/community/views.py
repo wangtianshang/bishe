@@ -155,7 +155,7 @@ class Topic_sendView(View):
             topic.content = message
             topic.image = image
             topic.save()
-        return HttpResponse('ok')
+        return HttpResponseRedirect('/topic/list/')
 
 #快速添加话题
 class Topic_sendView2(View):
